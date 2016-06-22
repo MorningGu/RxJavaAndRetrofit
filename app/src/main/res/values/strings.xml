@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">RxJavaAndRetrofit</string>
+    <!--测试服务器地址-->
+    <string name="debug_app_url">http://tmyhomeapp.goujiawang.com/</string>
+    <!--线上服务器地址-->
+    <string name="release_app_url">http://a.haaaaaa.com/</string>
+</resources>
