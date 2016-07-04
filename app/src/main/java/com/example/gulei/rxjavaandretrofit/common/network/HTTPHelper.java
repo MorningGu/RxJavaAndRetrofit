@@ -93,9 +93,10 @@ public enum  HTTPHelper {
      * @param resultType
      * @param listener
      */
-    private void initObservable(Observable observable, int resultType, ResultSubscriber.OnResultListener listener) {
+    private void initObservable(Observable observable, int resultType,boolean isRefresh, ResultSubscriber.OnResultListener listener) {
         ResultSubscriber mSubscriber = new ResultSubscriber();
         mSubscriber.setOnResultListener(listener);
+        mSubscriber.setRefresh(isRefresh);
         mSubscriber.setRequestType(resultType);
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -127,8 +128,8 @@ public enum  HTTPHelper {
      * @param resultType 用来区分请求方法的来源
      * @param listener
      */
-    public void postLogin(String phoneNum,String password, int resultType, ResultSubscriber.OnResultListener listener) {
+    public void postLogin(String phoneNum,String password, int resultType, boolean isRefresh,ResultSubscriber.OnResultListener listener) {
         Observable<JsonResult<UserData>> observable = mNetService.postLogin(phoneNum,password);
-        initObservable(observable, resultType, listener);
+        initObservable(observable, resultType,isRefresh ,listener);
     }
 }

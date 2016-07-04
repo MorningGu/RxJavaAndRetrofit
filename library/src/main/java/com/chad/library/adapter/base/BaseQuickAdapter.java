@@ -79,7 +79,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     //footerView 只有一个
     private View mFooterView;
     //一页加载的数量
-    private int pageSize = -1;
+    private int pageSize = 10;
     //普通的item内容布局
     private View mContentView;
     //空内容时的布局
@@ -165,7 +165,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
      * 刷新完成
      */
     public void refreshComplete() {
-        mRefreshView.refreshComplete();
+        if(mRefreshView!=null){
+            mRefreshView.refreshComplete();
+        }
     }
 
     /**
@@ -579,14 +581,14 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
     /**
      * 加载完成后调用这个方法来刷新view
      * @param data
-     * @param isNextLoad
      */
-    public void notifyDataChangedAfterLoadMore(List<T> data, boolean isNextLoad) {
-        if(data==null){
+    public void notifyDataChangedAfterLoadMore(List<T> data) {
+        if(data==null || data.size()==0){
+            notifyDataChangedAfterLoadMore(false);
             return;
         }
         mData.addAll(data);
-        notifyDataChangedAfterLoadMore(isNextLoad);
+        notifyDataChangedAfterLoadMore(true);
     }
 
     /**

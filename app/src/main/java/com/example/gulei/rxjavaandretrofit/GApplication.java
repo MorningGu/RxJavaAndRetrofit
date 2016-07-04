@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.Vibrator;
 
 import com.example.gulei.rxjavaandretrofit.common.utils.DeviceUuidFactory;
@@ -24,13 +25,15 @@ import java.lang.reflect.Field;
  */
 public class GApplication extends Application {
 
-    private static GApplication mInstance;
+    private static GApplication sInstance; //s的前缀，表示static m的前缀表示member
     //设备id工厂
     private DeviceUuidFactory deviceUuidFactory;
 
     private boolean isRelease = false;
 
     private Boolean hasCamera = null;
+
+    private Handler toastHandler;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -38,13 +41,15 @@ public class GApplication extends Application {
     }
     private void init(){
         //内存分析工具
+        // FIXME: 2016/6/29 0029  这个内存泄漏的检查，正式环境注释掉
         LeakCanary.install(this);
         /** 设置是否对日志信息进行加密, 默认false(不加密). */
         MobclickAgent.enableEncrypt(true);
-        mInstance = this;
+        sInstance = this;
         deviceUuidFactory = new DeviceUuidFactory(this.getApplicationContext());
         initDebug();
         ImageLoaderUtils.INSTANCE.init(this, Bitmap.Config.RGB_565);
+        toastHandler = new Handler();
     }
 
     /**
@@ -95,7 +100,7 @@ public class GApplication extends Application {
      * @return
      */
     public static GApplication getInstance() {
-        return mInstance;
+        return sInstance;
     }
     /**
      * 获取设备号
@@ -178,5 +183,9 @@ public class GApplication extends Application {
         ActivityManager am = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
         int memoryClass = am.getLargeMemoryClass();
         return 1024 * 1024 * memoryClass / 10;
+    }
+
+    public Handler getToastHandler() {
+        return toastHandler;
     }
 }

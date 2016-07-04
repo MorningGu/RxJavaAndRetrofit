@@ -19,28 +19,5 @@ public class MainActivityPresenter extends BasePresenter {
         super(view);
         this.view = view;
     }
-    public void method(String arg,boolean isRefresh){
-        HTTPHelper.INSTANCE.postLogin("yimi1",MD5Utils.getMD5Str("123456"),REQUEST_1,this);
-    }
-    public void method(String arg){
-        HTTPHelper.INSTANCE.postLogin("yimi1",MD5Utils.getMD5Str("123456"),REQUEST_2,this);
-    }
-    @Override
-    public void onNext(JsonResult t, int requestType, boolean isRefresh) {
-        super.onNext(t, requestType, isRefresh);
-        if(NetCodeNormal.SUCCESS.getCode() == t.getReturnCode()){
-            switch (requestType){
-                case REQUEST_1:{
-                    UserData data = (UserData) t.getData();
-                    view.updateData(PrintUtils.getText(data.toString()));
-                    break;
-                }
-                case REQUEST_2:{
-                    UserData data = (UserData) t.getData();
-                    view.updateData(PrintUtils.getText(data.toString()));
-                    break;
-                }
-            }
-        }
-    }
+
 }

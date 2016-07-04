@@ -1,6 +1,7 @@
 package com.example.gulei.rxjavaandretrofit.ui.base;
 
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -10,15 +11,19 @@ import com.example.gulei.rxjavaandretrofit.common.utils.AppManager;
 import com.example.gulei.rxjavaandretrofit.common.utils.LoadingUtils;
 import com.example.gulei.rxjavaandretrofit.mvp.iview.IBaseView;
 import com.example.gulei.rxjavaandretrofit.ui.view.HeadLayout;
+import com.example.gulei.rxjavaandretrofit.ui.view.statusbar.StatusBarHelper;
 import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by gulei on 2016/3/10.
  */
-public class BaseActivity extends AppCompatActivity implements IBaseView {
+public abstract class BaseActivity extends AppCompatActivity implements IBaseView {
     public int mScreenWidth;
     public int mScreenHeight;
+    //titlebar
     private HeadLayout mHeadLayout;
+    //状态栏
+    protected StatusBarHelper mStatusBarHelper;
     LoadingUtils mLoadingUtil;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,6 +78,7 @@ public class BaseActivity extends AppCompatActivity implements IBaseView {
                 }
             });
         }
+        initTitleColor(R.color.colorPrimary);
     }
     /**
      * 导航栏，左边图片和title右边文字
@@ -114,5 +120,22 @@ public class BaseActivity extends AppCompatActivity implements IBaseView {
         if (mLoadingUtil != null) {
             mLoadingUtil.dismissLoading();
         }
+    }
+    @Override
+    public void setStatusBarColor(int color) {
+        if (mStatusBarHelper == null) {
+            mStatusBarHelper = new StatusBarHelper(this, StatusBarHelper.LEVEL_19_TRANSLUCENT,
+                    StatusBarHelper.LEVEL_21_VIEW);
+        }
+        mStatusBarHelper.setColor(getResources().getColor(color));
+    }
+
+    @Override
+    public void setHeaderColor(int color) {
+        mHeadLayout.setBackgroundColor(getResources().getColor(color));
+    }
+    private void initTitleColor(int color){
+        setStatusBarColor(color);
+        setHeaderColor(color);
     }
 }

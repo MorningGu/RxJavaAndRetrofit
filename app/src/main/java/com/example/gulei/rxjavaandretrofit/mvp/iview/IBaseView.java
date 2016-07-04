@@ -6,4 +6,8 @@ package com.example.gulei.rxjavaandretrofit.mvp.iview;
 public interface IBaseView {
     void showLoading();
     void dismissLoading();
+    //状态栏
+    void setStatusBarColor(int color);
+    //title背景颜色
+    void setHeaderColor(int color);
 }

@@ -1,82 +1,85 @@
 package com.example.gulei.rxjavaandretrofit.ui.activity;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.gulei.rxjavaandretrofit.Config;
 import com.example.gulei.rxjavaandretrofit.R;
 import com.example.gulei.rxjavaandretrofit.common.utils.ImageLoaderUtils;
+import com.example.gulei.rxjavaandretrofit.common.utils.PrintUtils;
 import com.example.gulei.rxjavaandretrofit.mvp.iview.IMainActivityView;
 import com.example.gulei.rxjavaandretrofit.mvp.presenter.MainActivityPresenter;
+import com.example.gulei.rxjavaandretrofit.ui.adapter.MyAdapter;
 import com.example.gulei.rxjavaandretrofit.ui.base.BaseActivity;
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements IMainActivityView,SwipeRefreshLayout.OnRefreshListener{
-    private TextView tv_data;
-    private Button btn_start;
+public class MainActivity extends BaseActivity implements IMainActivityView{
+
     private SimpleDraweeView iv_bg;
-    private RecyclerView mRecyclerView;
     private MainActivityPresenter presenter;
+    private RecyclerView mRecyclerView;
     private MyAdapter adapter;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         presenter = new MainActivityPresenter(this);
+        initDefaultHeader("主页面");
         initView();
+        initData();
     }
     private void initView(){
-        mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipeLayout);
         mRecyclerView = (RecyclerView)findViewById(R.id.recycleview);
-        tv_data = (TextView) findViewById(R.id.tv_data);
-        btn_start = (Button)findViewById(R.id.btn_start);
         iv_bg = (SimpleDraweeView) findViewById(R.id.iv_bg);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-        //设置刷新时动画的颜色，可以设置4个
-        // 顶部刷新的样式
-        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
         ImageLoaderUtils.INSTANCE.displayImage("res:///"+R.mipmap.bg_splash,iv_bg, Config.IMAGE_SMALL,Config.IMAGE_SMALL);
-        btn_start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.method(null);
-            }
-        });
-        adapter = new MyAdapter(this,null);
+        adapter = new MyAdapter(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(adapter);
     }
+    private void initData(){
+        List<String> data = new ArrayList<>();
+        data.add("网络交互");
+        data.add("RecycleView");
+        adapter.notifyDataChangedAfterRefresh(data);
+        adapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                switch (view.getId()){
+                    case R.id.btn_show:{
+                        PrintUtils.showToast("按下按钮："+position);
+                        break;
+                    }
+                    case R.id.card:{
+                        switch (position){
+                            case 0:{
+                                Intent intent = new Intent(MainActivity.this,NetActivity.class);
+                                startActivity(intent);
+                                break;
+                            }
+                            case 1:{
+                                Intent intent = new Intent(MainActivity.this,RecyclerviewActivity.class);
+                                startActivity(intent);
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        });
+    }
     @Override
     public void updateData(String text) {
-        mSwipeRefreshLayout.setRefreshing(false);
-        tv_data.setText(text);
     }
 
-    @Override
-    public void onRefresh() {
-        presenter.method(null,true);
-    }
-    public class MyAdapter extends BaseQuickAdapter<String> {
-        public MyAdapter(Context context, List<String> datas) {
-            super(context, R.layout.common_header, datas);
-        }
 
-        @Override
-        protected void convert(BaseViewHolder helper, String item, int position) {
-
-        }
-    }
 }

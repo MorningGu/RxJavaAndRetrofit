@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.gulei.myapplication.ui.view.HeadLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.example.gulei.rxjavaandretrofit.ui.view.HeadLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/common_header"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -69,4 +69,4 @@
         android:textColor="#ffffff"
         android:text="标题"
         />
-</com.example.gulei.myapplication.ui.view.HeadLayout>
+</com.example.gulei.rxjavaandretrofit.ui.view.HeadLayout>

@@ -53,12 +53,11 @@ public class PrintUtils {
     }
     //吐司部分，只显示一个
     private static Toast mToast;
-//    private static Handler mhandler = new Handler();
-//    private static Runnable r = new Runnable(){
-//        public void run() {
-//            mToast.cancel();
-//        };
-//    };
+    private static Runnable r = new Runnable(){
+        public void run() {
+            mToast.cancel();
+        };
+    };
     public static void showToast(String text){
         showToast(GApplication.getInstance(),text,Toast.LENGTH_LONG);
     }
@@ -66,15 +65,16 @@ public class PrintUtils {
         if(TextUtils.isEmpty(text)){
             return;
         }
-//        mhandler.removeCallbacks(r);
+        Handler handler = GApplication.getInstance().getToastHandler();
+        handler.removeCallbacks(r);
         if (null != mToast) {
             mToast.setText(text);
             mToast.setDuration(duration);
-            //mhandler.postDelayed(r, 2000);
+            handler.postDelayed(r, 2000);
             mToast.show();
         } else {
             mToast = Toast.makeText(context, text, duration);
-            //mhandler.postDelayed(r, 2000);
+            handler.postDelayed(r, 2000);
             mToast.show();
         }
     }

@@ -78,6 +78,14 @@ public class ResultSubscriber extends Subscriber<JsonResult> {
     }
 
     /**
+     * 是否刷新的标记
+     * @param refresh
+     */
+    public void setRefresh(boolean refresh) {
+        isRefresh = refresh;
+    }
+
+    /**
      * 订阅的监听器
      */
     public interface OnResultListener {
