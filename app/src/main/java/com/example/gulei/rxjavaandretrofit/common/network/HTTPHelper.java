@@ -4,17 +4,23 @@ package com.example.gulei.rxjavaandretrofit.common.network;
 import com.example.gulei.rxjavaandretrofit.GApplication;
 import com.example.gulei.rxjavaandretrofit.common.entity.JsonResult;
 import com.example.gulei.rxjavaandretrofit.common.entity.user.UserData;
+import com.example.gulei.rxjavaandretrofit.common.utils.PrintUtils;
 import com.example.gulei.rxjavaandretrofit.common.utils.UrlInfoUtils;
+import com.trello.rxlifecycle.LifecycleTransformer;
 
+import java.io.File;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -93,20 +99,22 @@ public enum  HTTPHelper {
      * @param resultType
      * @param listener
      */
-    private void initObservable(Observable observable, int resultType,boolean isRefresh, ResultSubscriber.OnResultListener listener) {
+    private void initObservable(Observable observable, int resultType,boolean isRefresh, LifecycleTransformer former,ResultSubscriber.OnResultListener listener) {
         ResultSubscriber mSubscriber = new ResultSubscriber();
         mSubscriber.setOnResultListener(listener);
         mSubscriber.setRefresh(isRefresh);
         mSubscriber.setRequestType(resultType);
-        observable.subscribeOn(Schedulers.io())
+        observable.compose(former)
+                .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-//                .doOnUnsubscribe(new Action0() {
-//                    @Override
-//                    public void call() {
-//                        PrintUtils.d("取消了订阅","取消了订阅");
-//                    }
-//                })
+                .doOnUnsubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        PrintUtils.d("取消了订阅","取消了订阅");
+//                        PrintUtils.showToast("取消了订阅");
+                    }
+                })
                 .subscribe(mSubscriber);
     }
     //********************************对应 INetService接口中定义的请求方法*************************************************//
@@ -128,8 +136,12 @@ public enum  HTTPHelper {
      * @param resultType 用来区分请求方法的来源
      * @param listener
      */
-    public void postLogin(String phoneNum,String password, int resultType, boolean isRefresh,ResultSubscriber.OnResultListener listener) {
+    public void postLogin(String phoneNum, String password, int resultType, boolean isRefresh, LifecycleTransformer former,ResultSubscriber.OnResultListener listener) {
         Observable<JsonResult<UserData>> observable = mNetService.postLogin(phoneNum,password);
-        initObservable(observable, resultType,isRefresh ,listener);
+        initObservable(observable, resultType,isRefresh ,former,listener);
+    }
+    public void postUpload(RequestBody body,int resultType, boolean isRefresh,LifecycleTransformer former,ResultSubscriber.OnResultListener listener){
+        Observable<JsonResult<Map<String,String>>> observable = mNetService.postUpload(body,"1","android");
+        initObservable(observable, resultType,isRefresh ,former,listener);
     }
 }

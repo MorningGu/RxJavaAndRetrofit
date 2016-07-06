@@ -9,13 +9,12 @@ import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Handler;
 import android.os.Vibrator;
 
 import com.example.gulei.rxjavaandretrofit.common.utils.DeviceUuidFactory;
 
 import com.example.gulei.rxjavaandretrofit.common.utils.ImageLoaderUtils;
-import com.squareup.leakcanary.LeakCanary;
+//import com.squareup.leakcanary.LeakCanary;
 import com.umeng.analytics.MobclickAgent;
 
 import java.lang.reflect.Field;
@@ -33,8 +32,6 @@ public class GApplication extends Application {
 
     private Boolean hasCamera = null;
 
-    private Handler toastHandler;
-    @Override
     public void onCreate() {
         super.onCreate();
         init();
@@ -42,14 +39,13 @@ public class GApplication extends Application {
     private void init(){
         //内存分析工具
         // FIXME: 2016/6/29 0029  这个内存泄漏的检查，正式环境注释掉
-        LeakCanary.install(this);
+//        LeakCanary.install(this);
         /** 设置是否对日志信息进行加密, 默认false(不加密). */
         MobclickAgent.enableEncrypt(true);
         sInstance = this;
         deviceUuidFactory = new DeviceUuidFactory(this.getApplicationContext());
         initDebug();
         ImageLoaderUtils.INSTANCE.init(this, Bitmap.Config.RGB_565);
-        toastHandler = new Handler();
     }
 
     /**
@@ -185,7 +181,4 @@ public class GApplication extends Application {
         return 1024 * 1024 * memoryClass / 10;
     }
 
-    public Handler getToastHandler() {
-        return toastHandler;
-    }
 }

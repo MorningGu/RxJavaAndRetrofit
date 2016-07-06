@@ -12,9 +12,11 @@ import com.example.gulei.rxjavaandretrofit.mvp.iview.IBaseView;
  */
 public class BasePresenter implements ResultSubscriber.OnResultListener {
     private IBaseView mView;
+
     public BasePresenter(IBaseView view){
         mView = view;
     }
+
     @Override
     public void onStart(int requestType) {
         mView.showLoading();

@@ -7,12 +7,16 @@ import com.example.gulei.rxjavaandretrofit.common.entity.WeatherResponse;
 import com.example.gulei.rxjavaandretrofit.common.entity.user.UserData;
 
 import java.util.Map;
+
+import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import rx.Observable;
 
@@ -55,4 +59,7 @@ public interface INetInterface {
     @FormUrlEncoded
     @POST("mobile/login/authentication/login.do")
     Observable<JsonResult<UserData>> postLogin(@Field("mobile") String phoneNum, @Field("password") String password);
+    @Multipart
+    @POST("mobile/picture/upload.do")
+    Observable<JsonResult<Map<String, String>>> postUpload(@Part("file\"; filename=\"image.jpg") RequestBody file,@Part("type") String type,@Part("mobileType") String mobileType);
 }

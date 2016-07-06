@@ -1,8 +1,13 @@
 package com.example.gulei.rxjavaandretrofit.ui.base;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 
@@ -12,12 +17,15 @@ import com.example.gulei.rxjavaandretrofit.common.utils.LoadingUtils;
 import com.example.gulei.rxjavaandretrofit.mvp.iview.IBaseView;
 import com.example.gulei.rxjavaandretrofit.ui.view.HeadLayout;
 import com.example.gulei.rxjavaandretrofit.ui.view.statusbar.StatusBarHelper;
+import com.trello.rxlifecycle.ActivityEvent;
+import com.trello.rxlifecycle.components.RxActivity;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by gulei on 2016/3/10.
  */
-public abstract class BaseActivity extends AppCompatActivity implements IBaseView {
+public abstract class BaseActivity extends RxAppCompatActivity implements IBaseView {
     public int mScreenWidth;
     public int mScreenHeight;
     //titlebar
@@ -137,5 +145,35 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
     private void initTitleColor(int color){
         setStatusBarColor(color);
         setHeaderColor(color);
+    }
+
+    /**
+     * 检查权限
+     * @param permission
+     * @return
+     */
+    public boolean checkPermission(String permission){
+        int checkCallPhonePermission = ContextCompat.checkSelfPermission(this, permission);
+        if(checkCallPhonePermission != PackageManager.PERMISSION_GRANTED){
+            return false;
+        }else{
+           return true;
+        }
+    }
+
+    /**
+     * 请求权限
+     * 6.0之后版本的才有用，不然都返回true，onRequestPermissionsResult在面外自己实现
+     * @param permission 权限名称 Manifest.permission.WRITE_EXTERNAL_STORAGE
+     * @param requestCode onRequestPermissionsResult中的requestCode参数值，用来区分请求的权限
+     */
+    public boolean requestPermission(String permission,int requestCode){
+        if (Build.VERSION.SDK_INT >= 23) {
+            if(!checkPermission(permission)){
+                ActivityCompat.requestPermissions(this,new String[]{permission},requestCode);
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -1,7 +1,6 @@
 package com.example.gulei.rxjavaandretrofit.common.utils;
 
 import android.content.Context;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -53,11 +52,6 @@ public class PrintUtils {
     }
     //吐司部分，只显示一个
     private static Toast mToast;
-    private static Runnable r = new Runnable(){
-        public void run() {
-            mToast.cancel();
-        };
-    };
     public static void showToast(String text){
         showToast(GApplication.getInstance(),text,Toast.LENGTH_LONG);
     }
@@ -65,18 +59,14 @@ public class PrintUtils {
         if(TextUtils.isEmpty(text)){
             return;
         }
-        Handler handler = GApplication.getInstance().getToastHandler();
-        handler.removeCallbacks(r);
-        if (null != mToast) {
-            mToast.setText(text);
-            mToast.setDuration(duration);
-            handler.postDelayed(r, 2000);
-            mToast.show();
-        } else {
+//        Toast.makeText(context, text, duration).show();
+        if(mToast == null){
             mToast = Toast.makeText(context, text, duration);
-            handler.postDelayed(r, 2000);
-            mToast.show();
+        }else{
+            mToast.setDuration(duration);
+            mToast.setText(text);
         }
+        mToast.show();
     }
 
     public static void showToast (Context context, int strId, int duration) {
