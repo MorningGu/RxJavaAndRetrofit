@@ -1,26 +1,29 @@
 package com.example.gulei.rxjavaandretrofit.ui.base;
 
-import android.Manifest;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 
+import com.example.gulei.rxjavaandretrofit.Config;
 import com.example.gulei.rxjavaandretrofit.R;
 import com.example.gulei.rxjavaandretrofit.common.utils.AppManager;
+import com.example.gulei.rxjavaandretrofit.common.utils.DialogUtils;
 import com.example.gulei.rxjavaandretrofit.common.utils.LoadingUtils;
 import com.example.gulei.rxjavaandretrofit.mvp.iview.IBaseView;
+import com.example.gulei.rxjavaandretrofit.mvp.presenter.BasePresenter;
 import com.example.gulei.rxjavaandretrofit.ui.view.HeadLayout;
 import com.example.gulei.rxjavaandretrofit.ui.view.statusbar.StatusBarHelper;
-import com.trello.rxlifecycle.ActivityEvent;
-import com.trello.rxlifecycle.components.RxActivity;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import com.umeng.analytics.MobclickAgent;
+
+import java.io.File;
 
 /**
  * Created by gulei on 2016/3/10.
@@ -33,6 +36,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements IBaseV
     //状态栏
     protected StatusBarHelper mStatusBarHelper;
     LoadingUtils mLoadingUtil;
+    public BasePresenter presenter;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -175,5 +179,38 @@ public abstract class BaseActivity extends RxAppCompatActivity implements IBaseV
             }
         }
         return true;
+    }
+
+    @Override
+    public void showUpdateDialog(boolean isForce, final String url) {
+        String msg = "发现新版本，请更新";
+        if(isForce){
+            msg = "有重大更新，请升级后再使用画儿!";
+        }
+        DialogUtils.showDialog(this, "版本更新", msg, !isForce,!isForce,new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                presenter.downloadAPK(url, Config.BASE_DIR,"myHome.apk");
+            }
+        });
+    }
+
+    /**
+     * 安装apk文件
+     * @param apkPath
+     * @param apkName
+     */
+    @Override
+    public void installApk(String apkPath, String apkName) {
+            File apkFile = new File(apkPath, apkName);
+        if (!apkFile.exists()) {
+            return;
+        }
+        // 通过Intent安装APK文件
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setDataAndType(Uri.parse("file://" + apkFile.toString()),
+                "application/vnd.android.package-archive");
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
     }
 }

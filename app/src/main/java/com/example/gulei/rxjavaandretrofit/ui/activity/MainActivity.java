@@ -23,7 +23,6 @@ import java.util.List;
 public class MainActivity extends BaseActivity implements IMainActivityView{
 
     private SimpleDraweeView iv_bg;
-    private MainActivityPresenter presenter;
     private RecyclerView mRecyclerView;
     private MyAdapter adapter;
     @Override
@@ -49,6 +48,7 @@ public class MainActivity extends BaseActivity implements IMainActivityView{
         List<String> data = new ArrayList<>();
         data.add("网络交互");
         data.add("RecycleView");
+        data.add("版本更新");
         adapter.notifyDataChangedAfterRefresh(data);
         adapter.setOnRecyclerViewItemChildClickListener(new BaseQuickAdapter.OnRecyclerViewItemChildClickListener() {
             @Override
@@ -67,6 +67,11 @@ public class MainActivity extends BaseActivity implements IMainActivityView{
                             }
                             case 1:{
                                 Intent intent = new Intent(MainActivity.this,RecyclerviewActivity.class);
+                                startActivity(intent);
+                                break;
+                            }
+                            case 2:{
+                                Intent intent = new Intent(MainActivity.this,UpdateActivity.class);
                                 startActivity(intent);
                                 break;
                             }

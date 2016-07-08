@@ -19,12 +19,14 @@ public class DialogUtils {
      * @param cancelable
      * @param onOkListener
      */
-    public static void showDialog(Context context, String title, String msg, boolean cancelable, DialogInterface.OnClickListener onOkListener){
+    public static void showDialog(Context context, String title, String msg, boolean cancelable, boolean hasNegativeButton,DialogInterface.OnClickListener onOkListener){
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.MyAlertDialog));
         builder.setTitle(title);
         builder.setMessage(msg);
         builder.setCancelable(cancelable);
-        builder.setNegativeButton("取消", null);
+        if(hasNegativeButton){
+            builder.setNegativeButton("取消", null);
+        }
         builder.setPositiveButton("确定", onOkListener);
         builder.show();
     }

@@ -24,12 +24,12 @@ public class RecyclerviewActivity extends BaseActivity implements SwipeRefreshLa
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private MyAdapter adapter;
-    private RecycleviewActivityPresenter presenter = new RecycleviewActivityPresenter(this);
     private int pageNo = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycleview);
+        presenter = new RecycleviewActivityPresenter(this);
         initView();
     }
     private void initView(){
@@ -48,14 +48,14 @@ public class RecyclerviewActivity extends BaseActivity implements SwipeRefreshLa
         adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                presenter.requestData(pageNo+1,false);
+                ((RecycleviewActivityPresenter)presenter).requestData(pageNo+1,false);
             }
         });
     }
 
     @Override
     public void onRefresh() {
-        presenter.requestData(pageNo,true);
+        ((RecycleviewActivityPresenter)presenter).requestData(pageNo,true);
     }
 
     @Override

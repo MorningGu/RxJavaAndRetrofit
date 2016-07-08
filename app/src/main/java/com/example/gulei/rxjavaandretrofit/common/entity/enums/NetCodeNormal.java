@@ -4,7 +4,7 @@ package com.example.gulei.rxjavaandretrofit.common.entity.enums;
  * Created by gulei on 2016/6/17 0017.
  */
 public enum NetCodeNormal {
-    SUCCESS(0000,"返回成功"),UPDATE_MAST(2,"强制升级"),LOGIN_TIME_OUT(3,"登录超时");
+    SUCCESS(0000,"返回成功"),UPDATE_FORCE(2,"强制升级"),LOGIN_TIME_OUT(3,"登录超时");
     private int code;
     private String desc;
     NetCodeNormal(int code, String desc){

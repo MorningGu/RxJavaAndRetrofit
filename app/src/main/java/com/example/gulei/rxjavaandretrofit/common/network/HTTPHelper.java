@@ -3,12 +3,12 @@ package com.example.gulei.rxjavaandretrofit.common.network;
 
 import com.example.gulei.rxjavaandretrofit.GApplication;
 import com.example.gulei.rxjavaandretrofit.common.entity.JsonResult;
+import com.example.gulei.rxjavaandretrofit.common.entity.Version;
 import com.example.gulei.rxjavaandretrofit.common.entity.user.UserData;
 import com.example.gulei.rxjavaandretrofit.common.utils.PrintUtils;
 import com.example.gulei.rxjavaandretrofit.common.utils.UrlInfoUtils;
 import com.trello.rxlifecycle.LifecycleTransformer;
 
-import java.io.File;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -94,7 +94,7 @@ public enum  HTTPHelper {
     }
 
     /**
-     * 初始化观察者
+     * 初始化通用的观察者
      * @param observable
      * @param resultType
      * @param listener
@@ -117,6 +117,7 @@ public enum  HTTPHelper {
                 })
                 .subscribe(mSubscriber);
     }
+
     //********************************对应 INetService接口中定义的请求方法*************************************************//
 
     /**
@@ -140,8 +141,30 @@ public enum  HTTPHelper {
         Observable<JsonResult<UserData>> observable = mNetService.postLogin(phoneNum,password);
         initObservable(observable, resultType,isRefresh ,former,listener);
     }
+
+    /**
+     * 上传文件
+     * @param body
+     * @param resultType
+     * @param isRefresh
+     * @param former
+     * @param listener
+     */
     public void postUpload(RequestBody body,int resultType, boolean isRefresh,LifecycleTransformer former,ResultSubscriber.OnResultListener listener){
         Observable<JsonResult<Map<String,String>>> observable = mNetService.postUpload(body,"1","android");
         initObservable(observable, resultType,isRefresh ,former,listener);
     }
+
+    /**
+     * 检查更新
+     * @param resultType
+     * @param isRefresh
+     * @param former
+     * @param listener
+     */
+    public void postCheckUpdate(int resultType, boolean isRefresh,LifecycleTransformer former,ResultSubscriber.OnResultListener listener){
+        Observable<JsonResult<Version>> observable = mNetService.postCheckUpdate();
+        initObservable(observable, resultType,isRefresh ,former,listener);
+    }
+
 }

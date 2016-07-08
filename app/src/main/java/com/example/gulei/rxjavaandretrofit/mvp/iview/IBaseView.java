@@ -1,5 +1,7 @@
 package com.example.gulei.rxjavaandretrofit.mvp.iview;
 
+import android.app.Activity;
+
 /**
  * Created by gulei on 2016/5/3 0003.
  */
@@ -10,4 +12,18 @@ public interface IBaseView {
     void setStatusBarColor(int color);
     //title背景颜色
     void setHeaderColor(int color);
+
+    /**
+     * 显示更新的弹窗
+     * @param isForce 是否为强制更新
+     * @param url 下载地址
+     */
+    void showUpdateDialog(boolean isForce,String url);
+
+    /**
+     * 安装应用的请求
+     * @param apkPath
+     * @param apkName
+     */
+    void installApk(String apkPath, String apkName);
 }
