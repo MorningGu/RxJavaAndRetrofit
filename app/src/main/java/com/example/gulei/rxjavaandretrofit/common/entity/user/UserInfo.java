@@ -1,4 +1,6 @@
 package com.example.gulei.rxjavaandretrofit.common.entity.user;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -7,39 +9,39 @@ import java.io.Serializable;
  * 创建时间：2015/10/14  16:23
  */
 public class UserInfo extends UserBase implements Serializable{
-
+   @SerializedName("male")
    private String male;
-
+   @SerializedName("birthday")
    private String birthday;
-
+   @SerializedName("region")
    private String region;//城市
-
+   @SerializedName("name")
    private String name;  //用户登录名/昵称
-
+   @SerializedName("constellation")
    private String constellation;//所属星座，例如：狮子座
-
+   @SerializedName("zodiac")
    private String zodiac;// 生肖
-
+   @SerializedName("idCode")
    private String idCode;// 身份证号码
-
+   @SerializedName("nation")
    private String nation;// 民族
-
+   @SerializedName("img")
    private String img;//普通用户头像   缩略图
-
+   @SerializedName("originImg")
    private String originImg;//普通用户头像   原图
-
+   @SerializedName("type")
    private String type; //用户类型
-
+   @SerializedName("profession")
    private String profession;//职业
-
+   @SerializedName("mobile")
    private String mobile;//联系方式
-
+   @SerializedName("nickName")
    private String nickName;//用户真实姓名
-
+   @SerializedName("account")
    private String account;//账户名
-
+   @SerializedName("balance")
    private String balance;//账户余额
-
+   @SerializedName("invitationCode")
    private String invitationCode;//邀请码字段
 
    public String getSex() {

@@ -1,4 +1,6 @@
 package com.example.gulei.rxjavaandretrofit.common.entity.user;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -7,20 +9,22 @@ import java.io.Serializable;
  * 创建时间：2015/10/15  10:55
  */
 public class UserBase implements Serializable{
-
+   @SerializedName("id")
    private String id;
-
    //该记录是否无效：
+   @SerializedName("invalid")
    private Boolean invalid;
-
+   @SerializedName("status")
    private String status;////画家审核状态
-
+   @SerializedName("createdDatetime")
    private String createdDatetime;
 
    // 最近修改时间
+   @SerializedName("updatedDatetime")
    private String updatedDatetime;
 
    //排序标签
+   @SerializedName("orderTag")
    private String orderTag;
 
    public String getId() {

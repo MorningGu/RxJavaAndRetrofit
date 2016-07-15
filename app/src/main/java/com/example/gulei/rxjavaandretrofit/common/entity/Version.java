@@ -1,9 +1,12 @@
 package com.example.gulei.rxjavaandretrofit.common.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by gulei on 2016/7/8 0008.
  */
 public class Version {
+    @SerializedName("version")
     private VersionInfo version;
 
     public VersionInfo getVersion() {
@@ -15,31 +18,34 @@ public class Version {
     }
 
    public class VersionInfo{
-        private String versions;
-        private String serviceAddress;
-        private int size;
+       @SerializedName("versions")
+       private String versions;
+       @SerializedName("serviceAddress")
+       private String serviceAddress;
+       @SerializedName("size")
+       private int size;
 
-        public String getVersions() {
+       public String getVersions() {
             return versions;
         }
 
-        public void setVersions(String versions) {
+       public void setVersions(String versions) {
             this.versions = versions;
         }
 
-        public String getServiceAddress() {
+       public String getServiceAddress() {
             return serviceAddress;
         }
 
-        public void setServiceAddress(String serviceAddress) {
-            this.serviceAddress = serviceAddress;
-        }
+       public void setServiceAddress(String serviceAddress) {
+           this.serviceAddress = serviceAddress;
+       }
 
-        public int getSize() {
+       public int getSize() {
             return size;
         }
 
-        public void setSize(int size) {
+       public void setSize(int size) {
             this.size = size;
         }
     }

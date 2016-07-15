@@ -2,14 +2,14 @@ package com.example.gulei.rxjavaandretrofit.ui.adapter;
 
 import android.content.Context;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseNormalAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.gulei.rxjavaandretrofit.R;
 
 /**
  * Created by gulei on 2016/7/4 0004.
  */
-public class MyAdapter extends BaseQuickAdapter<String> {
+public class MyAdapter extends BaseNormalAdapter<String> {
     public MyAdapter(Context context) {
         super(context,R.layout.item_cardview,null);
     }

@@ -49,7 +49,7 @@ public enum ImageLoaderUtils {
     private ImagePipelineConfig initImagePipelineConfig(Bitmap.Config config){
         DiskCacheConfig diskCacheConfig = DiskCacheConfig.newBuilder(mContext)
                 .setBaseDirectoryPath(new File(Config.BASE_DIR,"Cache"))
-                .setBaseDirectoryName(Config.CACHE_DIR)
+//                .setBaseDirectoryName(Config.CACHE_DIR)//在上面路径里的子路径
                 .setMaxCacheSize(Config.CACHE_SIZE_DISK)//磁盘缓存
                 .build();
         final MemoryCacheParams bitmapCacheParams = new MemoryCacheParams(

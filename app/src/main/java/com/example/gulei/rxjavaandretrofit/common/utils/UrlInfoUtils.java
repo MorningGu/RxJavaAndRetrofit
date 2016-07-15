@@ -4,6 +4,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.text.TextUtils;
 
+import com.example.gulei.rxjavaandretrofit.BuildConfig;
 import com.example.gulei.rxjavaandretrofit.GApplication;
 import com.example.gulei.rxjavaandretrofit.R;
 
@@ -27,10 +28,10 @@ public class UrlInfoUtils {
      */
     public static String getAppUrl() {
         if(TextUtils.isEmpty(appUrl)){
-            if(GApplication.getInstance().isRelease()){
-                setAppUrl(GApplication.getInstance().getApplicationContext().getString(R.string.release_app_url)+UrlInfoUtils.getUrlCode());
-            }else{
+            if(BuildConfig.DEBUG){
                 setAppUrl(GApplication.getInstance().getApplicationContext().getString(R.string.debug_app_url)+UrlInfoUtils.getUrlCode());
+            }else{
+                setAppUrl(GApplication.getInstance().getApplicationContext().getString(R.string.release_app_url)+UrlInfoUtils.getUrlCode());
             }
         }
         return appUrl;

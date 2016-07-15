@@ -1,6 +1,7 @@
 package com.example.gulei.rxjavaandretrofit.common.network;
 
 
+import com.example.gulei.rxjavaandretrofit.BuildConfig;
 import com.example.gulei.rxjavaandretrofit.GApplication;
 import com.example.gulei.rxjavaandretrofit.common.entity.JsonResult;
 import com.example.gulei.rxjavaandretrofit.common.entity.Version;
@@ -25,8 +26,8 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
- * @Author: lizhipeng
- * @Data: 16/4/12 下午3:27
+ * @Author: 盖世
+ * @Data: 16/6/30
  * @Description: 网络请求数据类（单例）
  */
 public enum  HTTPHelper {
@@ -43,7 +44,7 @@ public enum  HTTPHelper {
      HTTPHelper() {
          //打印拦截器
          HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-         logging.setLevel(GApplication.getInstance().isRelease()?HttpLoggingInterceptor.Level.NONE:HttpLoggingInterceptor.Level.BODY);
+         logging.setLevel(BuildConfig.DEBUG?HttpLoggingInterceptor.Level.BODY:HttpLoggingInterceptor.Level.NONE);
          // 公私密匙
          //MarvelSigningInterceptor signingInterceptor = new MarvelSigningInterceptor(KeyValue.MARVEL_PUBLIC_KEY, KeyValue.MARVEL_PRIVATE_KEY);
 

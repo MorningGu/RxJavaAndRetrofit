@@ -1,22 +1,16 @@
 package com.example.gulei.rxjavaandretrofit.ui.activity;
 
-import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
-import com.example.gulei.rxjavaandretrofit.Config;
+import com.chad.library.adapter.base.BaseNormalAdapter;
 import com.example.gulei.rxjavaandretrofit.R;
-import com.example.gulei.rxjavaandretrofit.common.utils.ImageLoaderUtils;
 import com.example.gulei.rxjavaandretrofit.mvp.iview.IRecycleviewActivityView;
 import com.example.gulei.rxjavaandretrofit.mvp.presenter.RecycleviewActivityPresenter;
 import com.example.gulei.rxjavaandretrofit.ui.adapter.MyAdapter;
 import com.example.gulei.rxjavaandretrofit.ui.base.BaseActivity;
-import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
@@ -44,8 +38,9 @@ public class RecyclerviewActivity extends BaseActivity implements SwipeRefreshLa
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(adapter);
-        adapter.openLoadMore(10,true);
-        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+        adapter.setPageSize(10);
+        adapter.openLoadMore(true);
+        adapter.setOnLoadMoreListener(new BaseNormalAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
                 ((RecycleviewActivityPresenter)presenter).requestData(pageNo+1,false);
@@ -63,7 +58,7 @@ public class RecyclerviewActivity extends BaseActivity implements SwipeRefreshLa
         mSwipeRefreshLayout.setRefreshing(false);
         if(isRefresh){
             pageNo = 0;
-            adapter.notifyDataChangedAfterRefresh(list);
+            adapter.setNewData(list);
         }else{
             pageNo++;
             adapter.notifyDataChangedAfterLoadMore(list);

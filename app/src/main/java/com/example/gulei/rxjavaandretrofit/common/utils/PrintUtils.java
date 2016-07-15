@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.gulei.rxjavaandretrofit.BuildConfig;
 import com.example.gulei.rxjavaandretrofit.GApplication;
 
 /**
@@ -14,14 +15,14 @@ import com.example.gulei.rxjavaandretrofit.GApplication;
 public class PrintUtils {
 
     public static int v(String tag, String msg) {
-        if(!GApplication.getInstance().isRelease()){
+        if(BuildConfig.DEBUG){
             return Log.v(tag, msg);
         }
         return 0;
     }
 
     public static int d(String tag, String msg) {
-        if(!GApplication.getInstance().isRelease()){
+        if(BuildConfig.DEBUG){
             return Log.d(tag, msg);
         }
         return 0;
@@ -29,7 +30,7 @@ public class PrintUtils {
 
 
     public static int i(String tag, String msg) {
-        if(!GApplication.getInstance().isRelease()){
+        if(BuildConfig.DEBUG){
             return Log.i(tag, msg);
         }
         return 0;
@@ -37,7 +38,7 @@ public class PrintUtils {
 
 
     public static int w(String tag, String msg) {
-        if(!GApplication.getInstance().isRelease()){
+        if(BuildConfig.DEBUG){
             return Log.w(tag, msg);
         }
         return 0;
@@ -45,7 +46,7 @@ public class PrintUtils {
 
 
     public static int e(String tag, String msg) {
-        if(!GApplication.getInstance().isRelease()){
+        if(BuildConfig.DEBUG){
             return Log.e(tag, msg);
         }
         return 0;

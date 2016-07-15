@@ -28,7 +28,7 @@ public class GApplication extends Application {
     //设备id工厂
     private DeviceUuidFactory deviceUuidFactory;
 
-    private boolean isRelease = false;
+//    private boolean isRelease = false;
 
     private Boolean hasCamera = null;
 
@@ -44,7 +44,7 @@ public class GApplication extends Application {
         MobclickAgent.enableEncrypt(true);
         sInstance = this;
         deviceUuidFactory = new DeviceUuidFactory(this.getApplicationContext());
-        initDebug();
+//        initDebug();
         ImageLoaderUtils.INSTANCE.init(this, Bitmap.Config.RGB_565);
     }
 
@@ -68,28 +68,28 @@ public class GApplication extends Application {
         }
         return hasCamera;
     }
-    /**
-     * 初始化是否是debug
-     */
-    private void initDebug(){
-        ApplicationInfo appInfo = null;
-        try {
-            appInfo = GApplication.getInstance().getPackageManager()
-                    .getApplicationInfo(GApplication.getInstance().getPackageName(),
-                            PackageManager.GET_META_DATA);
-            isRelease =  appInfo.metaData.getBoolean("IS_RELEASE");
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+//    /**
+//     * 初始化是否是debug
+//     */
+//    private void initDebug(){
+//        ApplicationInfo appInfo = null;
+//        try {
+//            appInfo = GApplication.getInstance().getPackageManager()
+//                    .getApplicationInfo(GApplication.getInstance().getPackageName(),
+//                            PackageManager.GET_META_DATA);
+//            isRelease =  appInfo.metaData.getBoolean("IS_RELEASE");
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-    /**
-     * 是不是debug
-     * @return
-     */
-    public boolean isRelease(){
-        return isRelease;
-    }
+//    /**
+//     * 是不是debug
+//     * @return
+//     */
+//    public boolean isRelease(){
+//        return isRelease;
+//    }
 
     /**
      * 得到Application实例

@@ -33,10 +33,10 @@
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="${UMENG_CHANNEL_VALUE}" />
-        <!-- 是否线上包 -->
-        <meta-data
-            android:name="IS_RELEASE"
-            android:value="${IS_RELEASE_VALUE}" />
+        <!--&lt;!&ndash; 是否线上包 &ndash;&gt;-->
+        <!--<meta-data-->
+            <!--android:name="IS_RELEASE"-->
+            <!--android:value="${IS_RELEASE_VALUE}" />-->
         <!-- 网络地址的后缀版本号 -->
         <meta-data
             android:name="URL_CODE"

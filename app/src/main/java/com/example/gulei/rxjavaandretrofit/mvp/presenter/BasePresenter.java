@@ -1,13 +1,15 @@
 package com.example.gulei.rxjavaandretrofit.mvp.presenter;
 
-import android.os.Environment;
 
+import android.os.Build;
+
+import com.example.gulei.rxjavaandretrofit.BuildConfig;
 import com.example.gulei.rxjavaandretrofit.GApplication;
 import com.example.gulei.rxjavaandretrofit.common.entity.JsonResult;
 import com.example.gulei.rxjavaandretrofit.common.entity.enums.NetCodeNormal;
-import com.example.gulei.rxjavaandretrofit.common.network.HTTPHelper;
 import com.example.gulei.rxjavaandretrofit.common.network.INetInterface;
 import com.example.gulei.rxjavaandretrofit.common.network.ResultSubscriber;
+import com.example.gulei.rxjavaandretrofit.common.utils.AppManager;
 import com.example.gulei.rxjavaandretrofit.common.utils.PrintUtils;
 import com.example.gulei.rxjavaandretrofit.common.utils.UrlInfoUtils;
 import com.example.gulei.rxjavaandretrofit.mvp.iview.IBaseView;
@@ -27,7 +29,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Subscriber;
 
 
 /**
@@ -81,7 +82,7 @@ public class BasePresenter implements ResultSubscriber.OnResultListener {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create());
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(GApplication.getInstance().isRelease()?HttpLoggingInterceptor.Level.NONE:HttpLoggingInterceptor.Level.BODY);
+        logging.setLevel(BuildConfig.DEBUG?HttpLoggingInterceptor.Level.BODY:HttpLoggingInterceptor.Level.NONE);
         OkHttpClient.Builder okHttpClient = new OkHttpClient.Builder().addInterceptor(logging);
         Retrofit retrofit = retrofitBuilder
                 .client(okHttpClient.build())
@@ -89,31 +90,53 @@ public class BasePresenter implements ResultSubscriber.OnResultListener {
                 .build();
         INetInterface mNetService = retrofit.create(INetInterface.class);
         Call<ResponseBody> call = mNetService.downloadAPK(url);
+
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    InputStream is = response.body().byteStream();
-                    File filePath = new File(path);
-                    if(!filePath.exists()){
-                        filePath.mkdirs();
+            public void onResponse(Call<ResponseBody> call, final Response<ResponseBody> response) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        InputStream is = null;
+                        BufferedInputStream bis = null;
+                        FileOutputStream fos = null;
+                        try {
+                            is = response.body().byteStream();
+                            File filePath = new File(path);
+                            if(!filePath.exists()){
+                                filePath.mkdirs();
+                            }
+                            File file = new File(path, name);
+                            fos = new FileOutputStream(file);
+                            bis = new BufferedInputStream(is);
+                            byte[] buffer = new byte[1024];
+                            int len;
+                            while ((len = bis.read(buffer)) != -1) {
+                                fos.write(buffer, 0, len);
+                                fos.flush();
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }finally {
+                            try {
+                                if(fos!=null)
+                                    fos.close();
+                                if(bis!=null)
+                                    bis.close();
+                                if(is!=null)
+                                    is.close();
+                                AppManager.getAppManager().currentActivity().runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        mView.installApk(path,name);
+                                    }
+                                });
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
-                    File file = new File(path, name);
-                    FileOutputStream fos = new FileOutputStream(file);
-                    BufferedInputStream bis = new BufferedInputStream(is);
-                    byte[] buffer = new byte[1024];
-                    int len;
-                    while ((len = bis.read(buffer)) != -1) {
-                        fos.write(buffer, 0, len);
-                        fos.flush();
-                    }
-                    fos.close();
-                    bis.close();
-                    is.close();
-                    mView.installApk(path,name);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                }).start();
+                PrintUtils.showToast("服务端返回结果：");
             }
 
             @Override
@@ -121,6 +144,5 @@ public class BasePresenter implements ResultSubscriber.OnResultListener {
 
             }
         });
-
     }
 }

@@ -7,14 +7,14 @@ android {
     defaultConfig {
         applicationId "com.example.gulei.rxjavaandretrofit"
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
-        manifestPlaceholders = [APP_NAME: "MyApplication", UMENG_CHANNEL_VALUE: "MyApplication","IS_RELEASE_VALUE":false,"URL_CODE_VALUE":""]
+        manifestPlaceholders = [APP_NAME: "MyApplication", UMENG_CHANNEL_VALUE: "MyApplication","URL_CODE_VALUE":""]
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -24,7 +24,7 @@ dependencies {
 //    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.0.0'
-    compile 'com.android.support:recyclerview-v7:24.0.0'
+//    compile 'com.android.support:recyclerview-v7:24.0.0'
     //rxjava
     compile 'io.reactivex:rxjava:1.1.3'
     compile 'io.reactivex:rxandroid:1.1.0'
@@ -47,4 +47,5 @@ dependencies {
     //fresco
     compile 'com.facebook.fresco:fresco:0.11.0'
     compile project(path: ':library')
+    compile project(path: ':xrecyclerview')
 }
