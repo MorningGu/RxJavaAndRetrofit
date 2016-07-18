@@ -556,7 +556,7 @@ public abstract class BaseNormalAdapter<T> extends RecyclerView.Adapter<Recycler
     private void notifyDataChangedAfterLoadMore(boolean isNextLoad) {
         mNextLoadEnable = isNextLoad;
         mLoadingMoreEnable = false;
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
     }
 
     /**
@@ -568,8 +568,8 @@ public abstract class BaseNormalAdapter<T> extends RecyclerView.Adapter<Recycler
             notifyDataChangedAfterLoadMore(false);
             return;
         }
-        mData.addAll(data);
         notifyDataChangedAfterLoadMore(true);
+        addData(data);
     }
     /**
      * Set Custom ObjectAnimator
