@@ -1,6 +1,7 @@
 package com.example.gulei.rxjavaandretrofit.ui.activity;
 
 import android.Manifest;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +23,7 @@ public class NetActivity extends BaseActivity implements INetActivityView{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_net);
+        initDefaultHeader("网络通信");
         presenter = new NetActivityPresenter(this);
         initView();
     }
@@ -67,7 +69,13 @@ public class NetActivity extends BaseActivity implements INetActivityView{
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode){
             case 123:
-                ((NetActivityPresenter)presenter).upload("ddd",true,bindUntilEvent(ActivityEvent.DESTROY));
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    ((NetActivityPresenter)presenter).upload("ddd",true,bindUntilEvent(ActivityEvent.DESTROY));
+                } else {
+                    // Permission Denied
+                   PrintUtils.showToast("没有磁盘读写权限");
+                }
                 break;
         }
     }

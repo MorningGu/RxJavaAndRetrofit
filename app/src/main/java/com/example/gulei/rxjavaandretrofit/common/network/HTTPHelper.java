@@ -35,7 +35,7 @@ public enum  HTTPHelper {
     /**
      * 这一部分配置常量，可以抽取出常量类
      */
-    private static final long DEFAULT_TIMEOUT = 3000;//默认超时时间(毫秒)
+    private static final long DEFAULT_TIMEOUT = 10000;//默认超时时间(毫秒)
 
 
     private Retrofit mRetrofit;
@@ -53,6 +53,7 @@ public enum  HTTPHelper {
                  .retryOnConnectionFailure(true)//设置出现错误进行重新连接。;
                  //.addInterceptor(signingInterceptor)//加密处理
                  .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS)
+                 .readTimeout(DEFAULT_TIMEOUT,TimeUnit.MILLISECONDS)
                  .addInterceptor(logging);
 
          mRetrofit = new Retrofit.Builder()
@@ -96,9 +97,9 @@ public enum  HTTPHelper {
 
     /**
      * 初始化通用的观察者
-     * @param observable
-     * @param resultType
-     * @param listener
+     * @param observable 观察者
+     * @param resultType 请求标识
+     * @param listener 请求结果的监听
      */
     private void initObservable(Observable observable, int resultType,boolean isRefresh, LifecycleTransformer former,ResultSubscriber.OnResultListener listener) {
         ResultSubscriber mSubscriber = new ResultSubscriber();
@@ -123,8 +124,6 @@ public enum  HTTPHelper {
 
     /**
      * get获取网络数据的方法
-     *
-     * @param cityId
      */
     public <T extends JsonResult> void getWeather(Class<T> clazz , String cityId, int resultType, ResultSubscriber.OnResultListener listener) {
 //        Observable<T> observable = (Observable<T>) mNetService.postLogin(cityId);
@@ -135,8 +134,10 @@ public enum  HTTPHelper {
      * 登录
      * @param phoneNum
      * @param password
-     * @param resultType 用来区分请求方法的来源
-     * @param listener
+     * @param resultType 请求标识
+     * @param isRefresh 是否是刷新
+     * @param former rxJava生命周期标识
+     * @param listener 请求结果的监听
      */
     public void postLogin(String phoneNum, String password, int resultType, boolean isRefresh, LifecycleTransformer former,ResultSubscriber.OnResultListener listener) {
         Observable<JsonResult<UserData>> observable = mNetService.postLogin(phoneNum,password);
@@ -146,10 +147,10 @@ public enum  HTTPHelper {
     /**
      * 上传文件
      * @param body
-     * @param resultType
-     * @param isRefresh
-     * @param former
-     * @param listener
+     * @param resultType 请求标识
+     * @param isRefresh 是否是刷新
+     * @param former rxJava生命周期标识
+     * @param listener 请求结果的监听
      */
     public void postUpload(RequestBody body,int resultType, boolean isRefresh,LifecycleTransformer former,ResultSubscriber.OnResultListener listener){
         Observable<JsonResult<Map<String,String>>> observable = mNetService.postUpload(body,"1","android");
@@ -158,10 +159,10 @@ public enum  HTTPHelper {
 
     /**
      * 检查更新
-     * @param resultType
-     * @param isRefresh
-     * @param former
-     * @param listener
+     * @param resultType 请求标识
+     * @param isRefresh 是否是刷新
+     * @param former rxJava生命周期标识
+     * @param listener 请求结果的监听
      */
     public void postCheckUpdate(int resultType, boolean isRefresh,LifecycleTransformer former,ResultSubscriber.OnResultListener listener){
         Observable<JsonResult<Version>> observable = mNetService.postCheckUpdate();

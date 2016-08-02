@@ -52,6 +52,17 @@
         <activity android:name=".ui.activity.RecyclerviewActivity" />
         <activity android:name=".ui.activity.NetActivity" />
         <activity android:name=".ui.activity.UpdateActivity"></activity>
+        <service android:name=".GService"></service>
+        <!--<receiver android:name=".GService$AppReceiver"-->
+            <!--&gt;-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.PACKAGE_ADDED" />-->
+                <!--<action android:name="android.intent.action.PACKAGE_REPLACED" />-->
+                <!--<action android:name="android.intent.action.PACKAGE_REMOVED" />-->
+                <!--<data android:scheme="package" />-->
+                <!--&lt;!&ndash; 注意！！ 这句必须要加，否则接收不到BroadCast &ndash;&gt;-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
     </application>
 
 </manifest>

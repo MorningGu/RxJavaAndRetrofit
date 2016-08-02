@@ -3,7 +3,6 @@ package com.example.gulei.rxjavaandretrofit;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
@@ -11,13 +10,10 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Vibrator;
 
-import com.example.gulei.rxjavaandretrofit.common.utils.DeviceUuidFactory;
-
 import com.example.gulei.rxjavaandretrofit.common.utils.ImageLoaderUtils;
 //import com.squareup.leakcanary.LeakCanary;
+import com.example.gulei.rxjavaandretrofit.common.utils.ScreenUtil;
 import com.umeng.analytics.MobclickAgent;
-
-import java.lang.reflect.Field;
 
 /**
  * Created by gulei on 2016/4/29 0029.
@@ -25,8 +21,6 @@ import java.lang.reflect.Field;
 public class GApplication extends Application {
 
     private static GApplication sInstance; //s的前缀，表示static m的前缀表示member
-    //设备id工厂
-    private DeviceUuidFactory deviceUuidFactory;
 
 //    private boolean isRelease = false;
 
@@ -42,8 +36,8 @@ public class GApplication extends Application {
 //        LeakCanary.install(this);
         /** 设置是否对日志信息进行加密, 默认false(不加密). */
         MobclickAgent.enableEncrypt(true);
+        MobclickAgent.setDebugMode( true );
         sInstance = this;
-        deviceUuidFactory = new DeviceUuidFactory(this.getApplicationContext());
 //        initDebug();
         ImageLoaderUtils.INSTANCE.init(this, Bitmap.Config.RGB_565);
     }
@@ -98,14 +92,6 @@ public class GApplication extends Application {
     public static GApplication getInstance() {
         return sInstance;
     }
-    /**
-     * 获取设备号
-     *
-     * @return
-     */
-    public String getDeviceId() {
-        return deviceUuidFactory.getDeviceUuid();
-    }
 
     /**
      * 获取当前系统版本号
@@ -123,23 +109,8 @@ public class GApplication extends Application {
     /**
      * 获取状态栏高度
      */
-    public int getBarHeight() {
-        Class<?> c = null;
-        Object obj = null;
-        Field field = null;
-        int x = 0, sbar = 38;// 默认为38，貌似大部分是这样的
-
-        try {
-            c = Class.forName("com.android.internal.R$dimen");
-            obj = c.newInstance();
-            field = c.getField("status_bar_height");
-            x = Integer.parseInt(field.get(obj).toString());
-            sbar = getResources().getDimensionPixelSize(x);
-
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-        return sbar;
+    public int getStatusBarHeight() {
+        return ScreenUtil.getStatusHeight(this);
     }
     /**
      * 获取的是铃声的Uri

@@ -1,17 +1,19 @@
 package com.example.gulei.rxjavaandretrofit.ui.base;
 
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 
 import com.example.gulei.rxjavaandretrofit.Config;
+import com.example.gulei.rxjavaandretrofit.GService;
 import com.example.gulei.rxjavaandretrofit.R;
 import com.example.gulei.rxjavaandretrofit.common.utils.AppManager;
 import com.example.gulei.rxjavaandretrofit.common.utils.DialogUtils;
@@ -41,7 +43,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements IBaseV
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // 初始化屏幕区域
-        AppManager.getAppManager().addActivity(this);
+        AppManager.INSTANCE.addActivity(this);
         DisplayMetrics metric = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metric);
         mScreenWidth = metric.widthPixels;
@@ -65,8 +67,11 @@ public abstract class BaseActivity extends RxAppCompatActivity implements IBaseV
 
     @Override
     protected void onDestroy() {
+        if(mConnection!=null){
+            unbindService(mConnection);
+        }
         super.onDestroy();
-        AppManager.getAppManager().finishActivity(this);
+        AppManager.INSTANCE.finishActivity(this);
     }
 
 //    @Override
@@ -86,7 +91,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements IBaseV
             mHeadLayout.initTitleAndLeftImage(title, R.mipmap.ic_launcher, new HeadLayout.OnLeftClickListener() {
                 @Override
                 public void onClick() {
-                    AppManager.getAppManager().finishActivity(BaseActivity.this);
+                    AppManager.INSTANCE.finishActivity(BaseActivity.this);
                 }
             });
         }
@@ -103,7 +108,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements IBaseV
             mHeadLayout.initTitleAndImageText(title, R.mipmap.ic_launcher, rightText,new HeadLayout.OnLeftClickListener() {
                 @Override
                 public void onClick() {
-                    AppManager.getAppManager().finishActivity(BaseActivity.this);
+                    AppManager.INSTANCE.finishActivity(BaseActivity.this);
                 }
             },onRightClickListener);
         }
@@ -152,31 +157,25 @@ public abstract class BaseActivity extends RxAppCompatActivity implements IBaseV
     }
 
     /**
-     * 检查权限
-     * @param permission
-     * @return
-     */
-    public boolean checkPermission(String permission){
-        int checkCallPhonePermission = ContextCompat.checkSelfPermission(this, permission);
-        if(checkCallPhonePermission != PackageManager.PERMISSION_GRANTED){
-            return false;
-        }else{
-           return true;
-        }
-    }
-
-    /**
      * 请求权限
      * 6.0之后版本的才有用，不然都返回true，onRequestPermissionsResult在面外自己实现
      * @param permission 权限名称 Manifest.permission.WRITE_EXTERNAL_STORAGE
      * @param requestCode onRequestPermissionsResult中的requestCode参数值，用来区分请求的权限
      */
-    public boolean requestPermission(String permission,int requestCode){
-        if (Build.VERSION.SDK_INT >= 23) {
-            if(!checkPermission(permission)){
-                ActivityCompat.requestPermissions(this,new String[]{permission},requestCode);
+    public boolean requestPermission(final String permission, final int requestCode){
+        int checkPermission = ContextCompat.checkSelfPermission(this, permission);
+        if(checkPermission != PackageManager.PERMISSION_GRANTED){
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+                DialogUtils.showDialog(this, "提示", "请开启相应权限后再使用此功能", true, true, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ActivityCompat.requestPermissions(BaseActivity.this,new String[]{permission},requestCode);
+                    }
+                });
                 return false;
             }
+            ActivityCompat.requestPermissions(this,new String[]{permission},requestCode);
+            return false;
         }
         return true;
     }
@@ -190,27 +189,32 @@ public abstract class BaseActivity extends RxAppCompatActivity implements IBaseV
         DialogUtils.showDialog(this, "版本更新", msg, !isForce,!isForce,new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                presenter.downloadAPK(url, Config.BASE_DIR,"myHome.apk");
+                if(mConnection==null){
+                    mConnection = new GServiceConnection();
+                    mConnection.url = url;
+                    Intent intent = new Intent(BaseActivity.this,GService.class);
+                    bindService(intent,mConnection,BIND_AUTO_CREATE);
+                }else{
+                    mConnection.url = url;
+                    mBinder.startDownLoadAPK(url,Config.BASE_DIR,"myHome.apk");
+                }
+//                presenter.downloadAPK(url, Config.BASE_DIR,"myHome.apk");
             }
         });
     }
 
-    /**
-     * 安装apk文件
-     * @param apkPath
-     * @param apkName
-     */
-    @Override
-    public void installApk(String apkPath, String apkName) {
-            File apkFile = new File(apkPath, apkName);
-        if (!apkFile.exists()) {
-            return;
+    private GService.GBinder mBinder;
+    private GServiceConnection mConnection;
+    class GServiceConnection implements ServiceConnection {
+        public String url;//下载链接地址
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBinder = (GService.GBinder) service;
+            mBinder.startDownLoadAPK(url,Config.BASE_DIR,"myHome.apk");
         }
-        // 通过Intent安装APK文件
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setDataAndType(Uri.parse("file://" + apkFile.toString()),
-                "application/vnd.android.package-archive");
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(i);
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
     }
 }

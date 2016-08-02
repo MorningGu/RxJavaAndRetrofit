@@ -23,6 +23,7 @@ public class RecyclerviewActivity extends BaseActivity implements SwipeRefreshLa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycleview);
+        initDefaultHeader("RecyclerView");
         presenter = new RecycleviewActivityPresenter(this);
         initView();
     }

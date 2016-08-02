@@ -10,25 +10,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
-public class AppManager {
-
-	private static Stack<Activity> activityStack;
+public enum  AppManager {
+	INSTANCE;
+	private  Stack<Activity> activityStack;
 	private static AppManager instance;
 
-	private AppManager() {
-	}
-
-	/**
-	 * 单一实例
-	 */
-	public static AppManager getAppManager() {
-		if (instance == null) {
-			instance = new AppManager();
-		}
+	AppManager() {
 		if (activityStack == null) {
 			activityStack = new Stack<Activity>();
 		}
-		return instance;
 	}
 
 	/**

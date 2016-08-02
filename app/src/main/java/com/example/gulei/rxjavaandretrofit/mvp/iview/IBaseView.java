@@ -20,10 +20,4 @@ public interface IBaseView {
      */
     void showUpdateDialog(boolean isForce,String url);
 
-    /**
-     * 安装应用的请求
-     * @param apkPath
-     * @param apkName
-     */
-    void installApk(String apkPath, String apkName);
 }
