@@ -33,9 +33,6 @@ public class GService extends Service {
     /** Notification管理 */
     public NotificationManager mNotificationManager;
     NotificationCompat.Builder mBuilder;
-    // 通知栏跳转Intent
-    private Intent updateIntent = null;
-    private PendingIntent updatePendingIntent = null;
     /** Notification的ID 下载的通知id*/
     int notifyId = 102;
     AppReceiver appReceiver = null;

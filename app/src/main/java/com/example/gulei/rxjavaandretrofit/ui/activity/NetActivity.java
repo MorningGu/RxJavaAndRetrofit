@@ -4,8 +4,10 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.gulei.rxjavaandretrofit.R;
@@ -19,6 +21,9 @@ public class NetActivity extends BaseActivity implements INetActivityView{
     private TextView tv_data;
     private Button btn_start;
     private Button btn_upload;
+    private Button btn_send;
+    private Button btn_receive;
+    private EditText et_content;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +36,27 @@ public class NetActivity extends BaseActivity implements INetActivityView{
         tv_data = (TextView) findViewById(R.id.tv_data);
         btn_start = (Button)findViewById(R.id.btn_start);
         btn_upload = (Button)findViewById(R.id.btn_upload);
+        btn_send = (Button)findViewById(R.id.btn_send);
+        btn_receive = (Button)findViewById(R.id.btn_receive);
+        et_content = (EditText) findViewById(R.id.et_content);
+        btn_send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String msg = et_content.getText().toString();
+                tv_data.setText(msg);
+//                ((NetActivityPresenter)presenter).sendMessage(Base64.encodeToString(msg.getBytes(),Base64.DEFAULT),bindUntilEvent(ActivityEvent.DESTROY));
+                //这里的bindUntilEvent(ActivityEvent.DESTROY)是表示在什么样的生命周期取消订阅
+                ((NetActivityPresenter)presenter).sendMessage(msg,bindUntilEvent(ActivityEvent.DESTROY));
+            }
+        });
+        btn_receive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //这里的bindUntilEvent(ActivityEvent.DESTROY)是表示在什么样的生命周期取消订阅
+                ((NetActivityPresenter)presenter).requestMessage(bindUntilEvent(ActivityEvent.DESTROY));
+            }
+        });
+
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -74,12 +74,6 @@ public abstract class BaseActivity extends RxAppCompatActivity implements IBaseV
         AppManager.INSTANCE.finishActivity(this);
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        AppManager.getAppManager().finishActivity(this);
-//    }
-
     /**
      * 默认的导航栏，左边图片和title
      * @param title

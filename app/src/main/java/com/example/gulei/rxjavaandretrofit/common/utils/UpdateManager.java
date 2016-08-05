@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.gulei.rxjavaandretrofit.BuildConfig;
+import com.example.gulei.rxjavaandretrofit.GApplication;
 import com.example.gulei.rxjavaandretrofit.common.network.INetInterface;
 import com.example.gulei.rxjavaandretrofit.common.network.ProgressInterceptor;
 import com.example.gulei.rxjavaandretrofit.common.network.ProgressListener;
@@ -52,7 +53,7 @@ public enum UpdateManager {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create());
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(BuildConfig.DEBUG?HttpLoggingInterceptor.Level.BODY:HttpLoggingInterceptor.Level.NONE);
+        logging.setLevel(GApplication.getInstance().isDebug()?HttpLoggingInterceptor.Level.BODY:HttpLoggingInterceptor.Level.NONE);
         OkHttpClient.Builder okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(logging)
                 .addInterceptor(new ProgressInterceptor(progressListener));

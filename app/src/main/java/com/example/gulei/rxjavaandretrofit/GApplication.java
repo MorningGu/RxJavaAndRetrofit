@@ -3,6 +3,7 @@ package com.example.gulei.rxjavaandretrofit;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
@@ -12,8 +13,12 @@ import android.os.Vibrator;
 
 import com.example.gulei.rxjavaandretrofit.common.utils.ImageLoaderUtils;
 //import com.squareup.leakcanary.LeakCanary;
+import com.example.gulei.rxjavaandretrofit.common.utils.PrintUtils;
 import com.example.gulei.rxjavaandretrofit.common.utils.ScreenUtil;
 import com.umeng.analytics.MobclickAgent;
+
+import rx.plugins.RxJavaErrorHandler;
+import rx.plugins.RxJavaPlugins;
 
 /**
  * Created by gulei on 2016/4/29 0029.
@@ -22,7 +27,7 @@ public class GApplication extends Application {
 
     private static GApplication sInstance; //s的前缀，表示static m的前缀表示member
 
-//    private boolean isRelease = false;
+    private boolean isDebug = false;
 
     private Boolean hasCamera = null;
 
@@ -38,8 +43,15 @@ public class GApplication extends Application {
         MobclickAgent.enableEncrypt(true);
         MobclickAgent.setDebugMode( true );
         sInstance = this;
-//        initDebug();
+        initDebug();
         ImageLoaderUtils.INSTANCE.init(this, Bitmap.Config.RGB_565);
+        //这里一定要，不然当网络请求出错时会崩溃，404必崩
+//        RxJavaPlugins.getInstance().registerErrorHandler(new RxJavaErrorHandler() {
+//            @Override
+//            public void handleError(Throwable e) {
+//                PrintUtils.e("rxJava Error",e.getMessage());
+//            }
+//        });
     }
 
     /**
@@ -62,28 +74,28 @@ public class GApplication extends Application {
         }
         return hasCamera;
     }
-//    /**
-//     * 初始化是否是debug
-//     */
-//    private void initDebug(){
-//        ApplicationInfo appInfo = null;
-//        try {
-//            appInfo = GApplication.getInstance().getPackageManager()
-//                    .getApplicationInfo(GApplication.getInstance().getPackageName(),
-//                            PackageManager.GET_META_DATA);
-//            isRelease =  appInfo.metaData.getBoolean("IS_RELEASE");
-//        } catch (PackageManager.NameNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    /**
+     * 初始化是否是debug
+     */
+    private void initDebug(){
+        ApplicationInfo appInfo = null;
+        try {
+            appInfo = GApplication.getInstance().getPackageManager()
+                    .getApplicationInfo(GApplication.getInstance().getPackageName(),
+                            PackageManager.GET_META_DATA);
+            isDebug =  appInfo.metaData.getBoolean("IS_DEBUG");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
-//    /**
-//     * 是不是debug
-//     * @return
-//     */
-//    public boolean isRelease(){
-//        return isRelease;
-//    }
+    /**
+     * 是不是debug
+     * @return
+     */
+    public boolean isDebug(){
+        return isDebug;
+    }
 
     /**
      * 得到Application实例

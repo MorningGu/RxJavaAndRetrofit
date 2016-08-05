@@ -1,5 +1,6 @@
 package com.example.gulei.rxjavaandretrofit.common.network;
 
+import com.example.gulei.rxjavaandretrofit.common.entity.Emoji;
 import com.example.gulei.rxjavaandretrofit.common.entity.JsonResult;
 import com.example.gulei.rxjavaandretrofit.common.entity.Version;
 import com.example.gulei.rxjavaandretrofit.common.entity.user.UserData;
@@ -15,6 +16,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 import rx.Observable;
@@ -85,4 +87,20 @@ public interface INetInterface {
     @Streaming
     @GET
     Call<ResponseBody> downloadAPK (@Url String url);
+
+    /**
+     * 发消息
+     * @param msg
+     * @return
+     */
+    @GET("framework/mobile/comment/addComment.do/{words}")
+    Observable<JsonResult<Emoji>> postSendMessage(@Path("words") String msg);
+
+    /**
+     * 请求消息
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("framework/mobile/comment/getComments.do")
+    Observable<JsonResult<Emoji>> postRequestMessage();
 }

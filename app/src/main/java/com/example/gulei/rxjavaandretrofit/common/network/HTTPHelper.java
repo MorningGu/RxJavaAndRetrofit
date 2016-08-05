@@ -1,8 +1,8 @@
 package com.example.gulei.rxjavaandretrofit.common.network;
 
 
-import com.example.gulei.rxjavaandretrofit.BuildConfig;
 import com.example.gulei.rxjavaandretrofit.GApplication;
+import com.example.gulei.rxjavaandretrofit.common.entity.Emoji;
 import com.example.gulei.rxjavaandretrofit.common.entity.JsonResult;
 import com.example.gulei.rxjavaandretrofit.common.entity.Version;
 import com.example.gulei.rxjavaandretrofit.common.entity.user.UserData;
@@ -44,7 +44,7 @@ public enum  HTTPHelper {
      HTTPHelper() {
          //打印拦截器
          HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-         logging.setLevel(BuildConfig.DEBUG?HttpLoggingInterceptor.Level.BODY:HttpLoggingInterceptor.Level.NONE);
+         logging.setLevel(GApplication.getInstance().isDebug()?HttpLoggingInterceptor.Level.BODY:HttpLoggingInterceptor.Level.NONE);
          // 公私密匙
          //MarvelSigningInterceptor signingInterceptor = new MarvelSigningInterceptor(KeyValue.MARVEL_PUBLIC_KEY, KeyValue.MARVEL_PRIVATE_KEY);
 
@@ -55,7 +55,6 @@ public enum  HTTPHelper {
                  .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS)
                  .readTimeout(DEFAULT_TIMEOUT,TimeUnit.MILLISECONDS)
                  .addInterceptor(logging);
-
          mRetrofit = new Retrofit.Builder()
                 .client(okHttpClient.build())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -168,5 +167,12 @@ public enum  HTTPHelper {
         Observable<JsonResult<Version>> observable = mNetService.postCheckUpdate();
         initObservable(observable, resultType,isRefresh ,former,listener);
     }
-
+    public void postSendMessage(int resultType, boolean isRefresh,LifecycleTransformer former,String msg,ResultSubscriber.OnResultListener listener){
+        Observable<JsonResult<Emoji>> observable = mNetService.postSendMessage(msg);
+        initObservable(observable, resultType,isRefresh ,former,listener);
+    }
+    public void postRequestMessage(int resultType, boolean isRefresh,LifecycleTransformer former,ResultSubscriber.OnResultListener listener){
+        Observable<JsonResult<Emoji>> observable = mNetService.postRequestMessage();
+        initObservable(observable, resultType,isRefresh ,former,listener);
+    }
 }

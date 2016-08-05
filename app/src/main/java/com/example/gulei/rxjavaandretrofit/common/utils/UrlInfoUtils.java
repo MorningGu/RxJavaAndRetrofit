@@ -10,7 +10,7 @@ import com.example.gulei.rxjavaandretrofit.R;
 
 
 public class UrlInfoUtils {
-    private static String appUrl;
+    private static String appUrl = "http://192.168.18.53:8080/";
     private static String userUrl;
     private static String shopUrl;
     private static String contentUrl;
@@ -28,7 +28,7 @@ public class UrlInfoUtils {
      */
     public static String getAppUrl() {
         if(TextUtils.isEmpty(appUrl)){
-            if(BuildConfig.DEBUG){
+            if(GApplication.getInstance().isDebug()){
                 setAppUrl(GApplication.getInstance().getApplicationContext().getString(R.string.debug_app_url)+UrlInfoUtils.getUrlCode());
             }else{
                 setAppUrl(GApplication.getInstance().getApplicationContext().getString(R.string.release_app_url)+UrlInfoUtils.getUrlCode());
