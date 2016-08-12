@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.chad.library.adapter.base.BaseNormalAdapter;
+import cn.gulei.library.adapter.BaseNormalAdapter;
 import com.example.gulei.rxjavaandretrofit.R;
 import com.example.gulei.rxjavaandretrofit.mvp.iview.IRecycleviewActivityView;
 import com.example.gulei.rxjavaandretrofit.mvp.presenter.RecycleviewActivityPresenter;

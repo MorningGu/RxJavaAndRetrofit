@@ -52,6 +52,7 @@
         <activity android:name=".ui.activity.RecyclerviewActivity" />
         <activity android:name=".ui.activity.NetActivity" />
         <activity android:name=".ui.activity.UpdateActivity"></activity>
+        <activity android:name=".ui.activity.ScanActivity"></activity>
         <service android:name=".GService"></service>
         <!--<receiver android:name=".GService$AppReceiver"-->
             <!--&gt;-->

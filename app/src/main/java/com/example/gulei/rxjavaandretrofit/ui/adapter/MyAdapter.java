@@ -2,8 +2,8 @@ package com.example.gulei.rxjavaandretrofit.ui.adapter;
 
 import android.content.Context;
 
-import com.chad.library.adapter.base.BaseNormalAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
+import cn.gulei.library.adapter.BaseNormalAdapter;
+import cn.gulei.library.adapter.BaseViewHolder;
 import com.example.gulei.rxjavaandretrofit.R;
 
 /**

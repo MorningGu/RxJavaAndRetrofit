@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.chad.library.adapter.base.BaseNormalAdapter;
+import cn.gulei.library.adapter.BaseNormalAdapter;
 import com.example.gulei.rxjavaandretrofit.Config;
 import com.example.gulei.rxjavaandretrofit.R;
 import com.example.gulei.rxjavaandretrofit.common.utils.ImageLoaderUtils;
@@ -50,6 +50,7 @@ public class MainActivity extends BaseActivity implements IMainActivityView{
         data.add("网络交互");
         data.add("RecycleView");
         data.add("版本更新");
+        data.add("图片裁剪");
         adapter.setNewData(data);
         adapter.setOnRecyclerViewItemChildClickListener(new BaseNormalAdapter.OnRecyclerViewItemChildClickListener(){
             @Override
@@ -73,6 +74,11 @@ public class MainActivity extends BaseActivity implements IMainActivityView{
                             }
                             case 2:{
                                 Intent intent = new Intent(MainActivity.this,UpdateActivity.class);
+                                startActivity(intent);
+                                break;
+                            }
+                            case 3:{
+                                Intent intent = new Intent(MainActivity.this,ScanActivity.class);
                                 startActivity(intent);
                                 break;
                             }
