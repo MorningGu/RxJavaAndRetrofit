@@ -6,13 +6,13 @@ import com.example.gulei.rxjavaandretrofit.common.entity.Emoji;
 import com.example.gulei.rxjavaandretrofit.common.entity.JsonResult;
 import com.example.gulei.rxjavaandretrofit.common.entity.Version;
 import com.example.gulei.rxjavaandretrofit.common.entity.user.UserData;
-import com.example.gulei.rxjavaandretrofit.common.utils.PrintUtils;
 import com.example.gulei.rxjavaandretrofit.common.utils.UrlInfoUtils;
 import com.trello.rxlifecycle.LifecycleTransformer;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import cn.gulei.library.utils.LogUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -112,8 +112,8 @@ public enum  HTTPHelper {
                 .doOnUnsubscribe(new Action0() {
                     @Override
                     public void call() {
-                        PrintUtils.d("取消了订阅","取消了订阅");
-//                        PrintUtils.showToast("取消了订阅");
+                        LogUtils.d("取消了订阅","取消了订阅");
+//                        ToastUtils.showToast("取消了订阅");
                     }
                 })
                 .subscribe(mSubscriber);

@@ -17,7 +17,9 @@ import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 
 import com.example.gulei.rxjavaandretrofit.common.network.ProgressListener;
-import com.example.gulei.rxjavaandretrofit.common.utils.PrintUtils;
+import com.example.gulei.rxjavaandretrofit.common.utils.ToastUtils;
+
+import cn.gulei.library.utils.LogUtils;
 import com.example.gulei.rxjavaandretrofit.common.utils.UpdateManager;
 
 import java.io.File;
@@ -199,8 +201,8 @@ public class GService extends Service {
             if (TextUtils.equals(intent.getAction(), Intent.ACTION_PACKAGE_ADDED)) {
                 String packageName = intent.getData().getSchemeSpecificPart();
                 if(packageName.equals("goujiawang.myhome")){
-                    PrintUtils.d(TAG, "--------安装成功" + packageName);
-                    PrintUtils.showToast("安装成功" + packageName);
+                    LogUtils.d(TAG, "--------安装成功" + packageName);
+                    ToastUtils.showToast("安装成功" + packageName);
                     clearNotify(notifyId);
                 }
 
@@ -209,16 +211,16 @@ public class GService extends Service {
             if (TextUtils.equals(intent.getAction(), Intent.ACTION_PACKAGE_REPLACED)) {
                 String packageName = intent.getData().getSchemeSpecificPart();
                 if(packageName.equals("goujiawang.myhome")){
-                    PrintUtils.d(TAG, "--------替换成功" + packageName);
-                    PrintUtils.showToast("替换成功" + packageName);
+                    LogUtils.d(TAG, "--------替换成功" + packageName);
+                    ToastUtils.showToast("替换成功" + packageName);
                     clearNotify(notifyId);
                 }
 
             }
 //            else if (TextUtils.equals(intent.getAction(), Intent.ACTION_PACKAGE_REMOVED)) {
 //                String packageName = intent.getData().getSchemeSpecificPart();
-//                PrintUtils.d(TAG, "--------卸载成功" + packageName);
-//                PrintUtils.showToast("卸载成功" + packageName);
+//                LogUtils.d(TAG, "--------卸载成功" + packageName);
+//                ToastUtils.showToast("卸载成功" + packageName);
 //            }
         }
 

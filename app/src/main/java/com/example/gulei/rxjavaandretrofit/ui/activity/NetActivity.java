@@ -4,18 +4,19 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.gulei.rxjavaandretrofit.R;
-import com.example.gulei.rxjavaandretrofit.common.utils.PrintUtils;
+import com.example.gulei.rxjavaandretrofit.common.utils.ToastUtils;
 import com.example.gulei.rxjavaandretrofit.mvp.iview.INetActivityView;
 import com.example.gulei.rxjavaandretrofit.mvp.presenter.NetActivityPresenter;
 import com.example.gulei.rxjavaandretrofit.ui.base.BaseActivity;
 import com.trello.rxlifecycle.ActivityEvent;
+
+import cn.gulei.library.utils.LogUtils;
 
 public class NetActivity extends BaseActivity implements INetActivityView{
     private TextView tv_data;
@@ -81,13 +82,13 @@ public class NetActivity extends BaseActivity implements INetActivityView{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        PrintUtils.d("NetActivity","销毁了activity");
+        LogUtils.d("NetActivity","销毁了activity");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        PrintUtils.d("NetActivity","activity暂停");
+        LogUtils.d("NetActivity","activity暂停");
     }
 
     @Override
@@ -100,7 +101,7 @@ public class NetActivity extends BaseActivity implements INetActivityView{
                     ((NetActivityPresenter)presenter).upload("ddd",true,bindUntilEvent(ActivityEvent.DESTROY));
                 } else {
                     // Permission Denied
-                   PrintUtils.showToast("没有磁盘读写权限");
+                   ToastUtils.showToast("没有磁盘读写权限");
                 }
                 break;
         }

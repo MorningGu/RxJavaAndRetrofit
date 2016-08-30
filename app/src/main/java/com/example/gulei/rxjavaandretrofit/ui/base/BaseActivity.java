@@ -13,19 +13,19 @@ import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 
 import com.example.gulei.rxjavaandretrofit.Config;
+import com.example.gulei.rxjavaandretrofit.GApplication;
 import com.example.gulei.rxjavaandretrofit.GService;
 import com.example.gulei.rxjavaandretrofit.R;
-import com.example.gulei.rxjavaandretrofit.common.utils.AppManager;
-import com.example.gulei.rxjavaandretrofit.common.utils.DialogUtils;
+import cn.gulei.library.utils.AppManager;
+import cn.gulei.library.utils.DialogUtils;
 import com.example.gulei.rxjavaandretrofit.common.utils.LoadingUtils;
 import com.example.gulei.rxjavaandretrofit.mvp.iview.IBaseView;
 import com.example.gulei.rxjavaandretrofit.mvp.presenter.BasePresenter;
 import com.example.gulei.rxjavaandretrofit.ui.view.HeadLayout;
 import com.example.gulei.rxjavaandretrofit.ui.view.statusbar.StatusBarHelper;
+import com.squareup.leakcanary.RefWatcher;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import com.umeng.analytics.MobclickAgent;
-
-import java.io.File;
 
 /**
  * Created by gulei on 2016/3/10.
@@ -48,6 +48,8 @@ public abstract class BaseActivity extends RxAppCompatActivity implements IBaseV
         getWindowManager().getDefaultDisplay().getMetrics(metric);
         mScreenWidth = metric.widthPixels;
         mScreenHeight = metric.heightPixels;
+        RefWatcher refWatcher = GApplication.getInstance().getRefWatcher();
+        refWatcher.watch(this);
     }
 
     public void onResume() {

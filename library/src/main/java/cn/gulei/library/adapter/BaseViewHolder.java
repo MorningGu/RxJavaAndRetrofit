@@ -1,11 +1,27 @@
+/**
+ * Copyright 2013 Joan Zapata
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package cn.gulei.library.adapter;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
 import android.text.util.Linkify;
 import android.util.SparseArray;
@@ -20,6 +36,9 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import java.util.HashSet;
+
+
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
@@ -30,7 +49,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      */
     private final SparseArray<View> views;
 
-    private final Context context;
+    private final HashSet<Integer> childClickViewIds;
+    private final HashSet<Integer> itemChildLongClickViewIds;
+
 
     public View convertView;
 
@@ -40,15 +61,25 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     Object associatedObject;
 
 
-    protected BaseViewHolder(Context context, View view) {
+    protected BaseViewHolder(View view) {
         super(view);
-        this.context = context;
         this.views = new SparseArray<View>();
+        this.childClickViewIds = new HashSet<>();
+        this.itemChildLongClickViewIds = new HashSet<>();
         convertView = view;
 
     }
 
+    public HashSet<Integer> getItemChildLongClickViewIds() {
+        return itemChildLongClickViewIds;
+    }
+
+    public HashSet<Integer> getChildClickViewIds() {
+        return  childClickViewIds;
+    }
+
     public View getConvertView() {
+
         return convertView;
     }
 
@@ -65,6 +96,12 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
+    public BaseViewHolder setText(int viewId, @StringRes int strId) {
+        TextView view = getView(viewId);
+        view.setText(strId);
+        return this;
+    }
+
     /**
      * Will set the image of an ImageView from a resource id.
      *
@@ -72,7 +109,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @param imageResId The image resource id.
      * @return The BaseViewHolder for chaining.
      */
-    public BaseViewHolder setImageResource(int viewId, int imageResId) {
+    public BaseViewHolder setImageResource(int viewId,@DrawableRes int imageResId) {
         ImageView view = getView(viewId);
         view.setImageResource(imageResId);
         return this;
@@ -98,7 +135,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @param backgroundRes A resource to use as a background.
      * @return The BaseViewHolder for chaining.
      */
-    public BaseViewHolder setBackgroundRes(int viewId, int backgroundRes) {
+    public BaseViewHolder setBackgroundRes(int viewId, @DrawableRes int backgroundRes) {
         View view = getView(viewId);
         view.setBackgroundResource(backgroundRes);
         return this;
@@ -117,18 +154,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    /**
-     * Will set text color of a TextView.
-     *
-     * @param viewId       The view id.
-     * @param textColorRes The text color resource id.
-     * @return The BaseViewHolder for chaining.
-     */
-    public BaseViewHolder setTextColorRes(int viewId, int textColorRes) {
-        TextView view = getView(viewId);
-        view.setTextColor(context.getResources().getColor(textColorRes));
-        return this;
-    }
 
     /**
      * Will set the image of an ImageView from a drawable.
@@ -287,23 +312,37 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     /**
      * Sets the on click listener of the view.
-     *
      * @param viewId   The view id.
      * @param listener The on click listener;
      * @return The BaseViewHolder for chaining.
      */
+    @Deprecated
     public BaseViewHolder setOnClickListener(int viewId, View.OnClickListener listener) {
         View view = getView(viewId);
         view.setOnClickListener(listener);
         return this;
     }
 
-    public BaseViewHolder setOnClickListener(int viewId, BaseNormalAdapter.OnItemChildClickListener listener) {
-        View view = getView(viewId);
-        listener.position = getAdapterPosition();
-        view.setOnClickListener(listener);
+    /**
+     * add childView id
+     * @param viewId add the child view id   can support childview click
+     * @return
+     */
+    public BaseViewHolder addOnClickListener(int viewId) {
+        childClickViewIds.add(viewId);
         return this;
     }
+
+    /**
+     * add long click view id
+     * @param viewId
+     * @return
+     */
+    public BaseViewHolder addOnLongClickListener(int viewId){
+        itemChildLongClickViewIds.add(viewId);
+        return this;
+    }
+
 
     /**
      * Sets the on touch listener of the view.

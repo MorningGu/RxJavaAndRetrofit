@@ -10,7 +10,8 @@ import com.example.gulei.rxjavaandretrofit.R;
 
 
 public class UrlInfoUtils {
-    private static String appUrl = "http://192.168.18.53:8080/";
+    private static String appUrl;
+//    private static String appUrl = "http://192.168.18.53:8080/";
     private static String userUrl;
     private static String shopUrl;
     private static String contentUrl;

@@ -9,9 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.gulei.rxjavaandretrofit.R;
-import com.example.gulei.rxjavaandretrofit.common.utils.PrintUtils;
+import com.example.gulei.rxjavaandretrofit.common.utils.ToastUtils;
 import com.example.gulei.rxjavaandretrofit.mvp.iview.IUpdateActivityView;
-import com.example.gulei.rxjavaandretrofit.mvp.presenter.NetActivityPresenter;
 import com.example.gulei.rxjavaandretrofit.mvp.presenter.UpdateActivityPresenter;
 import com.example.gulei.rxjavaandretrofit.ui.base.BaseActivity;
 import com.trello.rxlifecycle.ActivityEvent;
@@ -56,7 +55,7 @@ public class UpdateActivity extends BaseActivity implements IUpdateActivityView 
                     ((UpdateActivityPresenter)presenter).checkUpdate("sss",bindUntilEvent(ActivityEvent.DESTROY));
                 } else {
                     // Permission Denied
-                    PrintUtils.showToast("没有磁盘读写权限");
+                    ToastUtils.showToast("没有磁盘读写权限");
                 }
                 break;
         }

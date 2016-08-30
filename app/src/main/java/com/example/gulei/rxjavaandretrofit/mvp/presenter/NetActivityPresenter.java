@@ -1,14 +1,14 @@
 package com.example.gulei.rxjavaandretrofit.mvp.presenter;
 
-import android.util.Base64;
-
 import com.example.gulei.rxjavaandretrofit.common.entity.Emoji;
 import com.example.gulei.rxjavaandretrofit.common.entity.JsonResult;
 import com.example.gulei.rxjavaandretrofit.common.entity.enums.NetCodeNormal;
 import com.example.gulei.rxjavaandretrofit.common.entity.user.UserData;
 import com.example.gulei.rxjavaandretrofit.common.network.HTTPHelper;
-import com.example.gulei.rxjavaandretrofit.common.utils.MD5Utils;
-import com.example.gulei.rxjavaandretrofit.common.utils.PrintUtils;
+
+import cn.gulei.library.utils.LogUtils;
+import cn.gulei.library.utils.MD5Utils;
+import com.example.gulei.rxjavaandretrofit.common.utils.ToastUtils;
 import com.example.gulei.rxjavaandretrofit.mvp.iview.INetActivityView;
 import com.trello.rxlifecycle.LifecycleTransformer;
 
@@ -53,24 +53,24 @@ public class NetActivityPresenter extends BasePresenter {
             switch (requestType){
                 case REQUEST_1:{
                     Map<String,String> data = (Map<String,String>) t.getData();
-                    PrintUtils.showToast("上传完成");
-                    PrintUtils.d("上传请求","上传完成");
+                    ToastUtils.showToast("上传完成");
+                    LogUtils.d("上传请求","上传完成");
                     break;
                 }
                 case REQUEST_2:{
                     UserData data = (UserData) t.getData();
-                    view.updateData(PrintUtils.getText(data.toString()));
+                    view.updateData(ToastUtils.getText(data.toString()));
                     break;
                 }
                 case REQUEST_3:{
                     Emoji data = (Emoji) t.getData();
-//                    view.updateData(PrintUtils.getText(new String(Base64.decode(data.getWord(),Base64.DEFAULT))));
-                    view.updateData(PrintUtils.getText(data.getWord()));
+//                    view.updateData(ToastUtils.getText(new String(Base64.decode(data.getWord(),Base64.DEFAULT))));
+                    view.updateData(ToastUtils.getText(data.getWord()));
                     break;
                 }
                 case REQUEST_4: {
                     Emoji data = (Emoji) t.getData();
-                    view.updateData(PrintUtils.getText(data.getWord()));
+                    view.updateData(ToastUtils.getText(data.getWord()));
                     break;
                 }
             }

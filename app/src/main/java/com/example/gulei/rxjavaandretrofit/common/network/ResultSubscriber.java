@@ -2,7 +2,8 @@ package com.example.gulei.rxjavaandretrofit.common.network;
 
 
 import com.example.gulei.rxjavaandretrofit.common.entity.JsonResult;
-import com.example.gulei.rxjavaandretrofit.common.utils.PrintUtils;
+
+import cn.gulei.library.utils.LogUtils;
 import rx.Subscriber;
 
 /**
@@ -48,7 +49,7 @@ public class ResultSubscriber extends Subscriber<JsonResult> {
     @Override
     public void onError(Throwable e) {
         if (e != null){
-            PrintUtils.e("ResultSubscriber",e.getMessage());
+            LogUtils.e("ResultSubscriber",e.getMessage());
 //            e.printStackTrace();
             mListener.onError(mRequestType);
         }

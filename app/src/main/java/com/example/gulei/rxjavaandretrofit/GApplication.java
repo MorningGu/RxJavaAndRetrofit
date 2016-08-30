@@ -12,13 +12,13 @@ import android.net.Uri;
 import android.os.Vibrator;
 
 import com.example.gulei.rxjavaandretrofit.common.utils.ImageLoaderUtils;
-//import com.squareup.leakcanary.LeakCanary;
-import com.example.gulei.rxjavaandretrofit.common.utils.PrintUtils;
-import com.example.gulei.rxjavaandretrofit.common.utils.ScreenUtil;
+
+import cn.gulei.library.utils.LogUtils;
+import cn.gulei.library.utils.ScreenUtil;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 import com.umeng.analytics.MobclickAgent;
 
-import rx.plugins.RxJavaErrorHandler;
-import rx.plugins.RxJavaPlugins;
 
 /**
  * Created by gulei on 2016/4/29 0029.
@@ -31,25 +31,24 @@ public class GApplication extends Application {
 
     private Boolean hasCamera = null;
 
+    private RefWatcher mRefWatcher; //检查内存泄露
+
     public void onCreate() {
         super.onCreate();
         init();
     }
     private void init(){
         //内存分析工具
-        // FIXME: 2016/6/29 0029  这个内存泄漏的检查，正式环境注释掉
-//        LeakCanary.install(this);
-        /** 设置是否对日志信息进行加密, 默认false(不加密). */
-        MobclickAgent.enableEncrypt(true);
-        MobclickAgent.setDebugMode( true );
+        // 内存泄漏的检查
+        mRefWatcher = LeakCanary.install(this);
         sInstance = this;
         initDebug();
         ImageLoaderUtils.INSTANCE.init(this, Bitmap.Config.RGB_565);
-        //这里一定要，不然当网络请求出错时会崩溃，404必崩
+        //// FIXME: 2016/8/29 0029  当网络请求出错时会崩溃，之前测试404必崩 后来好了，原因不明
 //        RxJavaPlugins.getInstance().registerErrorHandler(new RxJavaErrorHandler() {
 //            @Override
 //            public void handleError(Throwable e) {
-//                PrintUtils.e("rxJava Error",e.getMessage());
+//                LogUtils.e("rxJava Error",e.getMessage());
 //            }
 //        });
     }
@@ -87,8 +86,20 @@ public class GApplication extends Application {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+        LogUtils.isDebug(isDebug);
+        /** 设置是否对日志信息进行加密, 默认false(不加密). */
+        MobclickAgent.enableEncrypt(true);
+//        if (isDebug){
+//            MobclickAgent.setDebugMode( true );
+//        }else{
+//            MobclickAgent.setDebugMode( false );
+//        }
+
     }
 
+    public RefWatcher getRefWatcher(){
+        return mRefWatcher;
+    }
     /**
      * 是不是debug
      * @return

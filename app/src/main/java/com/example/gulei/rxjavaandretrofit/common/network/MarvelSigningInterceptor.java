@@ -4,10 +4,9 @@ package com.example.gulei.rxjavaandretrofit.common.network;
  * Created by Administrator on 2016/3/21.
  */
 
-import com.example.gulei.rxjavaandretrofit.common.utils.PrintUtils;
-
 import java.io.IOException;
 
+import cn.gulei.library.utils.LogUtils;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -47,9 +46,9 @@ public class MarvelSigningInterceptor implements Interceptor {
                 .method(oldRequest.method(), oldRequest.body())
                 .url(authorizedUrlBuilder.build())
                 .build();
-        PrintUtils.i(TAG, "request:" + newRequest.toString());
+        LogUtils.i(TAG, "request:" + newRequest.toString());
         Response response = chain.proceed(newRequest);
-        PrintUtils.i(TAG, "response body:" + response.toString());
+        LogUtils.i(TAG, "response body:" + response.toString());
         return response;
     }
     public String generateMarvelHash(String str1, String str2) {

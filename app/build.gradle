@@ -11,6 +11,9 @@ android {
         versionCode 1
         versionName "1.0"
         manifestPlaceholders = [APP_NAME: "MyApplication", UMENG_CHANNEL_VALUE: "MyApplication","URL_CODE_VALUE":"","IS_DEBUG_VALUE":true]
+//        ndk {
+//            abiFilters   "armeabi" //"armeabi","armeabi-v7a"  // 指定要ndk需要兼容的架构(这样其他依赖包里mips,x86,armeabi,arm-v8之类的so会被过滤掉)
+//        }
     }
     buildTypes {
         release {
@@ -23,7 +26,7 @@ android {
 dependencies {
 //    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.0.0'
+//    compile 'com.android.support:appcompat-v7:24.0.0'
 //    compile 'com.android.support:recyclerview-v7:24.0.0'
     //rxjava
     compile 'io.reactivex:rxjava:1.1.6'
@@ -42,10 +45,12 @@ dependencies {
     //友盟
     compile 'com.umeng.analytics:analytics:latest.integration'
     //内存泄漏检查工具
-    // FIXME: 2016/6/29 0029  这个内存泄漏的检查，正式环境注释掉
+    // FIXME: 2016/6/29 0029  这个内存泄漏的检查，测试用debug 正式用release，正式的无操作，不会有影响
 //    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3'
+    compile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3'
     //fresco
     compile 'com.facebook.fresco:fresco:0.12.0'
     compile project(path: ':library')
     compile project(path: ':xrecyclerview')
+    compile project(path: ':scanlibrary')
 }

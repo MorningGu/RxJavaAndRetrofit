@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import cn.gulei.library.adapter.BaseNormalAdapter;
 import com.example.gulei.rxjavaandretrofit.R;
 import com.example.gulei.rxjavaandretrofit.mvp.iview.IRecycleviewActivityView;
 import com.example.gulei.rxjavaandretrofit.mvp.presenter.RecycleviewActivityPresenter;
@@ -13,6 +12,8 @@ import com.example.gulei.rxjavaandretrofit.ui.adapter.MyAdapter;
 import com.example.gulei.rxjavaandretrofit.ui.base.BaseActivity;
 
 import java.util.List;
+
+import cn.gulei.library.adapter.BaseQuickAdapter;
 
 public class RecyclerviewActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener,IRecycleviewActivityView {
     private RecyclerView mRecyclerView;
@@ -39,9 +40,8 @@ public class RecyclerviewActivity extends BaseActivity implements SwipeRefreshLa
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(adapter);
-        adapter.setPageSize(10);
-        adapter.openLoadMore(true);
-        adapter.setOnLoadMoreListener(new BaseNormalAdapter.RequestLoadMoreListener() {
+        adapter.openLoadMore(10);
+        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener(){
             @Override
             public void onLoadMoreRequested() {
                 ((RecycleviewActivityPresenter)presenter).requestData(pageNo+1,false);
@@ -62,7 +62,7 @@ public class RecyclerviewActivity extends BaseActivity implements SwipeRefreshLa
             adapter.setNewData(list);
         }else{
             pageNo++;
-            adapter.notifyDataChangedAfterLoadMore(list);
+            adapter.addData(list);
         }
     }
 

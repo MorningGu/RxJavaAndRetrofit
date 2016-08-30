@@ -3,7 +3,6 @@ package com.example.gulei.rxjavaandretrofit.common.utils;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.gulei.rxjavaandretrofit.BuildConfig;
 import com.example.gulei.rxjavaandretrofit.GApplication;
 import com.example.gulei.rxjavaandretrofit.common.network.INetInterface;
 import com.example.gulei.rxjavaandretrofit.common.network.ProgressInterceptor;
@@ -12,6 +11,8 @@ import com.example.gulei.rxjavaandretrofit.common.network.ProgressListener;
 import java.io.File;
 import java.io.IOException;
 
+import cn.gulei.library.utils.LogUtils;
+import cn.gulei.library.utils.PhoneUtil;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -37,7 +38,7 @@ public enum UpdateManager {
      * @return true 需要更新 false 不需要更新
      */
     public boolean checkUpdate(int versionCode, Context context){
-        if(versionCode > AppUtil.getVersionCode(context)){
+        if(versionCode > PhoneUtil.getVersionCode(context)){
             return true;
         }
         return false;
@@ -69,7 +70,7 @@ public enum UpdateManager {
             @Override
             public void onResponse(Call<ResponseBody> call, final Response<ResponseBody> response) {
                 if(response.isSuccessful()) {
-                    PrintUtils.d("---------------------","请求到数据");
+                    LogUtils.d("---------------------","请求到数据");
                     BufferedSink sink = null;
                     //下载文件到本地
                     File filePath = new File(path);
@@ -81,13 +82,13 @@ public enum UpdateManager {
                         sink = Okio.buffer(Okio.sink(file));
                         sink.writeAll(response.body().source());
                     } catch(Exception e) {
-                        PrintUtils.d("---------------------","异常了");
+                        LogUtils.d("---------------------","异常了");
                         e.printStackTrace();
                     } finally {
                         try {
                             if(sink != null) sink.close();
                         } catch(IOException e) {
-                            PrintUtils.d("---------------------","异常了2");
+                            LogUtils.d("---------------------","异常了2");
                             e.printStackTrace();
                         }
 
@@ -143,7 +144,7 @@ public enum UpdateManager {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                PrintUtils.d("---------------------","异常了3");
+                LogUtils.d("---------------------","异常了3");
             }
         });
     }

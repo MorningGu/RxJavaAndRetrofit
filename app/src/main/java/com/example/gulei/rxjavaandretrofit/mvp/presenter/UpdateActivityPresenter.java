@@ -3,11 +3,8 @@ package com.example.gulei.rxjavaandretrofit.mvp.presenter;
 import com.example.gulei.rxjavaandretrofit.common.entity.JsonResult;
 import com.example.gulei.rxjavaandretrofit.common.entity.Version;
 import com.example.gulei.rxjavaandretrofit.common.network.HTTPHelper;
-import com.example.gulei.rxjavaandretrofit.common.utils.UpdateManager;
 import com.example.gulei.rxjavaandretrofit.mvp.iview.IUpdateActivityView;
 import com.trello.rxlifecycle.LifecycleTransformer;
-
-import java.util.Map;
 
 /**
  * Created by gulei on 2016/7/7 0007.

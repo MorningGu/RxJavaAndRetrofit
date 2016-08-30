@@ -1,11 +1,5 @@
 package com.example.gulei.rxjavaandretrofit.mvp.presenter;
 
-import com.example.gulei.rxjavaandretrofit.common.entity.JsonResult;
-import com.example.gulei.rxjavaandretrofit.common.entity.enums.NetCodeNormal;
-import com.example.gulei.rxjavaandretrofit.common.entity.user.UserData;
-import com.example.gulei.rxjavaandretrofit.common.network.HTTPHelper;
-import com.example.gulei.rxjavaandretrofit.common.utils.MD5Utils;
-import com.example.gulei.rxjavaandretrofit.common.utils.PrintUtils;
 import com.example.gulei.rxjavaandretrofit.mvp.iview.IMainActivityView;
 
 /**

@@ -1,6 +1,5 @@
 package com.example.gulei.rxjavaandretrofit.ui.activity;
 
-import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -9,12 +8,13 @@ import android.os.Bundle;
 import com.example.gulei.rxjavaandretrofit.R;
 import com.example.gulei.rxjavaandretrofit.ui.base.BaseActivity;
 
-import cn.gulei.library.scan.IScanner;
-import cn.gulei.library.scan.OpenCVHelper;
-import cn.gulei.library.scan.PickImageFragment;
-import cn.gulei.library.scan.ResultFragment;
-import cn.gulei.library.scan.ScanConstants;
-import cn.gulei.library.scan.ScanFragment;
+import cn.gulei.scanlibrary.scan.IScanner;
+import cn.gulei.scanlibrary.scan.OpenCVHelper;
+import cn.gulei.scanlibrary.scan.PickImageFragment;
+import cn.gulei.scanlibrary.scan.ResultFragment;
+import cn.gulei.scanlibrary.scan.ScanConstants;
+import cn.gulei.scanlibrary.scan.ScanFragment;
+
 
 /**
  * Created by jhansi on 28/03/15.
