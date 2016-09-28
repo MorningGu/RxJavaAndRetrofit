@@ -22,7 +22,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements IMainActivityView{
+public class MainActivity extends BaseActivity<IMainActivityView,MainActivityPresenter> implements IMainActivityView{
 
     private SimpleDraweeView iv_bg;
     private RecyclerView mRecyclerView;
@@ -31,12 +31,17 @@ public class MainActivity extends BaseActivity implements IMainActivityView{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        presenter = new MainActivityPresenter(this);
         initDefaultHeader("主页面");
         initView();
         initData();
         ToastUtils.showToast("跟县城还有关系？");
     }
+
+    @Override
+    protected MainActivityPresenter createPresenter() {
+        return new MainActivityPresenter();
+    }
+
     private void initView(){
         mRecyclerView = (RecyclerView)findViewById(R.id.recycleview);
         iv_bg = (SimpleDraweeView) findViewById(R.id.iv_bg);

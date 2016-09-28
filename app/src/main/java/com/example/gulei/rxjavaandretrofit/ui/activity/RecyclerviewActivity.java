@@ -15,7 +15,7 @@ import java.util.List;
 
 import cn.gulei.library.adapter.BaseQuickAdapter;
 
-public class RecyclerviewActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener,IRecycleviewActivityView {
+public class RecyclerviewActivity extends BaseActivity<IRecycleviewActivityView,RecycleviewActivityPresenter> implements SwipeRefreshLayout.OnRefreshListener,IRecycleviewActivityView {
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private MyAdapter adapter;
@@ -25,9 +25,14 @@ public class RecyclerviewActivity extends BaseActivity implements SwipeRefreshLa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycleview);
         initDefaultHeader("RecyclerView");
-        presenter = new RecycleviewActivityPresenter(this);
         initView();
     }
+
+    @Override
+    protected RecycleviewActivityPresenter createPresenter() {
+        return new RecycleviewActivityPresenter();
+    }
+
     private void initView(){
         mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipeLayout);
         mRecyclerView = (RecyclerView)findViewById(R.id.recycleview);
@@ -44,14 +49,14 @@ public class RecyclerviewActivity extends BaseActivity implements SwipeRefreshLa
         adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener(){
             @Override
             public void onLoadMoreRequested() {
-                ((RecycleviewActivityPresenter)presenter).requestData(pageNo+1,false);
+                mPresenter.requestData(pageNo+1,false);
             }
         });
     }
 
     @Override
     public void onRefresh() {
-        ((RecycleviewActivityPresenter)presenter).requestData(pageNo,true);
+        mPresenter.requestData(pageNo,true);
     }
 
     @Override

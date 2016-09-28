@@ -1,10 +1,10 @@
 package com.example.gulei.rxjavaandretrofit.mvp.presenter;
 
-import com.example.gulei.rxjavaandretrofit.common.entity.Emoji;
-import com.example.gulei.rxjavaandretrofit.common.entity.JsonResult;
-import com.example.gulei.rxjavaandretrofit.common.entity.enums.NetCodeNormal;
-import com.example.gulei.rxjavaandretrofit.common.entity.user.UserData;
-import com.example.gulei.rxjavaandretrofit.common.network.HTTPHelper;
+import com.example.gulei.rxjavaandretrofit.common.network.ApiManager;
+import com.example.gulei.rxjavaandretrofit.mvp.entity.Emoji;
+import com.example.gulei.rxjavaandretrofit.mvp.entity.JsonResult;
+import com.example.gulei.rxjavaandretrofit.mvp.entity.enums.NetCodeNormal;
+import com.example.gulei.rxjavaandretrofit.mvp.entity.user.UserData;
 
 import cn.gulei.library.utils.LogUtils;
 import cn.gulei.library.utils.MD5Utils;
@@ -21,35 +21,33 @@ import okhttp3.RequestBody;
 /**
  * Created by gulei on 2016/7/4 0004.
  */
-public class NetActivityPresenter extends BasePresenter {
+public class NetActivityPresenter extends BasePresenter<INetActivityView> {
     private final int REQUEST_1 = 0x1001;
     private final int REQUEST_2 = 0x1002;
     private final int REQUEST_3 = 0x1003;
     private final int REQUEST_4 = 0x1004;
-    private INetActivityView view;
 
-    public NetActivityPresenter(INetActivityView view) {
-        super(view);
-        this.view = view;
+    public NetActivityPresenter() {
     }
     public void upload(String arg, boolean isRefresh, LifecycleTransformer former){
         File file = new File("/sdcard/Download/1111.jpg");
         RequestBody body =  RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        HTTPHelper.INSTANCE.postUpload(body,REQUEST_1,isRefresh,former,this);
+        ApiManager.INSTANCE.startObservable(ApiManager.INSTANCE.getINetInterface().postUpload(body,"1","android"),REQUEST_1,false,former,this);
     }
     public void method(String arg, LifecycleTransformer former){
-        HTTPHelper.INSTANCE.postLogin("yimi1",MD5Utils.getMD5Str("123456"),REQUEST_2,false,former,this);
+        ApiManager.INSTANCE.startObservable(ApiManager.INSTANCE.getINetInterface().postLogin("yimi1",MD5Utils.getMD5Str("123456")), REQUEST_2,false,former,this);
     }
     public void sendMessage(String msg,LifecycleTransformer former){
-        HTTPHelper.INSTANCE.postSendMessage(REQUEST_3,false,former,msg,this);
+        ApiManager.INSTANCE.startObservable(ApiManager.INSTANCE.getINetInterface().postSendMessage(msg),REQUEST_3,false,former,this);
     }
     public void requestMessage(LifecycleTransformer former){
-        HTTPHelper.INSTANCE.postRequestMessage(REQUEST_4,false,former,this);
+        ApiManager.INSTANCE.startObservable(ApiManager.INSTANCE.getINetInterface().postRequestMessage(),REQUEST_4,false,former,this);
     }
     @Override
     public void onNext(JsonResult t, int requestType, boolean isRefresh) {
         super.onNext(t, requestType, isRefresh);
         if(NetCodeNormal.SUCCESS.getCode() == t.getReturnCode()){
+            INetActivityView view = getView();
             switch (requestType){
                 case REQUEST_1:{
                     Map<String,String> data = (Map<String,String>) t.getData();
@@ -59,18 +57,23 @@ public class NetActivityPresenter extends BasePresenter {
                 }
                 case REQUEST_2:{
                     UserData data = (UserData) t.getData();
-                    view.updateData(ToastUtils.getText(data.toString()));
+                    getView().updateData(ToastUtils.getText(data.toString()));
                     break;
                 }
                 case REQUEST_3:{
-                    Emoji data = (Emoji) t.getData();
 //                    view.updateData(ToastUtils.getText(new String(Base64.decode(data.getWord(),Base64.DEFAULT))));
-                    view.updateData(ToastUtils.getText(data.getWord()));
+                    if(view!=null){
+                        Emoji data = (Emoji) t.getData();
+                        view.updateData(ToastUtils.getText(data.getWord()));
+                    }
+
                     break;
                 }
                 case REQUEST_4: {
-                    Emoji data = (Emoji) t.getData();
-                    view.updateData(ToastUtils.getText(data.getWord()));
+                    if(view!=null){
+                        Emoji data = (Emoji) t.getData();
+                        view.updateData(ToastUtils.getText(data.getWord()));
+                    }
                     break;
                 }
             }

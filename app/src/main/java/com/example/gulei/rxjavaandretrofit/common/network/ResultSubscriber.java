@@ -1,7 +1,7 @@
 package com.example.gulei.rxjavaandretrofit.common.network;
 
 
-import com.example.gulei.rxjavaandretrofit.common.entity.JsonResult;
+import com.example.gulei.rxjavaandretrofit.mvp.entity.JsonResult;
 
 import cn.gulei.library.utils.LogUtils;
 import rx.Subscriber;

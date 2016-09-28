@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.example.gulei.rxjavaandretrofit.R;
+import com.example.gulei.rxjavaandretrofit.mvp.iview.IMainActivityView;
+import com.example.gulei.rxjavaandretrofit.mvp.presenter.MainActivityPresenter;
 import com.example.gulei.rxjavaandretrofit.ui.base.BaseActivity;
 
 import cn.gulei.scanlibrary.scan.IScanner;
@@ -19,13 +21,18 @@ import cn.gulei.scanlibrary.scan.ScanFragment;
 /**
  * Created by jhansi on 28/03/15.
  */
-public class ScanActivity extends BaseActivity implements IScanner {
+public class ScanActivity extends BaseActivity<IMainActivityView,MainActivityPresenter> implements IScanner {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.scan_layout);
         init();
+    }
+
+    @Override
+    protected MainActivityPresenter createPresenter() {
+        return null;
     }
 
     private void init() {

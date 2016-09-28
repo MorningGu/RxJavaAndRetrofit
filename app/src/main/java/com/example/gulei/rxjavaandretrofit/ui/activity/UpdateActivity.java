@@ -15,7 +15,7 @@ import com.example.gulei.rxjavaandretrofit.mvp.presenter.UpdateActivityPresenter
 import com.example.gulei.rxjavaandretrofit.ui.base.BaseActivity;
 import com.trello.rxlifecycle.ActivityEvent;
 
-public class UpdateActivity extends BaseActivity implements IUpdateActivityView {
+public class UpdateActivity extends BaseActivity<IUpdateActivityView,UpdateActivityPresenter> implements IUpdateActivityView {
     Button btn_update;
     TextView tv_data;
     @Override
@@ -24,9 +24,14 @@ public class UpdateActivity extends BaseActivity implements IUpdateActivityView 
         setContentView(R.layout.activity_update);
         initDefaultHeader("检查更新");
         initView();
-        presenter = new UpdateActivityPresenter(this);
 
     }
+
+    @Override
+    protected UpdateActivityPresenter createPresenter() {
+        return new UpdateActivityPresenter();
+    }
+
     private void initView(){
         btn_update = (Button)findViewById(R.id.btn_update);
         tv_data = (TextView)findViewById(R.id.tv_data);
@@ -34,7 +39,7 @@ public class UpdateActivity extends BaseActivity implements IUpdateActivityView 
             @Override
             public void onClick(View view) {
                 if(requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,123)){
-                    ((UpdateActivityPresenter)presenter).checkUpdate("sss",bindUntilEvent(ActivityEvent.DESTROY));
+                    mPresenter.checkUpdate("sss",bindUntilEvent(ActivityEvent.DESTROY));
                 }
             }
         });
@@ -52,7 +57,7 @@ public class UpdateActivity extends BaseActivity implements IUpdateActivityView 
             case 123:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission Granted
-                    ((UpdateActivityPresenter)presenter).checkUpdate("sss",bindUntilEvent(ActivityEvent.DESTROY));
+                    mPresenter.checkUpdate("sss",bindUntilEvent(ActivityEvent.DESTROY));
                 } else {
                     // Permission Denied
                     ToastUtils.showToast("没有磁盘读写权限");

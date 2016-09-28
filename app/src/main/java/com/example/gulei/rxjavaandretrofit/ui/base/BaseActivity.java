@@ -30,7 +30,7 @@ import com.umeng.analytics.MobclickAgent;
 /**
  * Created by gulei on 2016/3/10.
  */
-public abstract class BaseActivity extends RxAppCompatActivity implements IBaseView {
+public abstract class BaseActivity<V,T extends BasePresenter<V>> extends RxAppCompatActivity implements IBaseView {
     public int mScreenWidth;
     public int mScreenHeight;
     //titlebar
@@ -38,7 +38,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements IBaseV
     //状态栏
     protected StatusBarHelper mStatusBarHelper;
     LoadingUtils mLoadingUtil;
-    public BasePresenter presenter;
+    protected T mPresenter;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,10 +48,23 @@ public abstract class BaseActivity extends RxAppCompatActivity implements IBaseV
         getWindowManager().getDefaultDisplay().getMetrics(metric);
         mScreenWidth = metric.widthPixels;
         mScreenHeight = metric.heightPixels;
+        initPresenter();
         RefWatcher refWatcher = GApplication.getInstance().getRefWatcher();
         refWatcher.watch(this);
     }
-
+    private void initPresenter(){
+        //初始化Presenter
+        mPresenter = createPresenter();
+        //presenter与View绑定
+        if(null != mPresenter){
+            mPresenter.attachView((V)this);
+        }
+    }
+    /**
+     * 创建presenter
+     * @return
+     */
+    protected abstract T createPresenter();
     public void onResume() {
         super.onResume();
         //统计页面(仅有Activity的应用中SDK自动调用，不需要单独写。参数为页面名称，可自定义)
@@ -72,10 +85,17 @@ public abstract class BaseActivity extends RxAppCompatActivity implements IBaseV
         if(mConnection!=null){
             unbindService(mConnection);
         }
+        detachPresenter();
         super.onDestroy();
         AppManager.INSTANCE.finishActivity(this);
     }
-
+    private void detachPresenter(){
+        //presenter与activity解绑定
+        if(null != mPresenter){
+            mPresenter.detachView();
+            mPresenter = null;
+        }
+    }
     /**
      * 默认的导航栏，左边图片和title
      * @param title

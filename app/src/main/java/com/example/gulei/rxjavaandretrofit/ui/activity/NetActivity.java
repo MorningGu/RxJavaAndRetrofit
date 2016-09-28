@@ -18,7 +18,7 @@ import com.trello.rxlifecycle.ActivityEvent;
 
 import cn.gulei.library.utils.LogUtils;
 
-public class NetActivity extends BaseActivity implements INetActivityView{
+public class NetActivity extends BaseActivity<INetActivityView,NetActivityPresenter> implements INetActivityView{
     private TextView tv_data;
     private Button btn_start;
     private Button btn_upload;
@@ -30,9 +30,14 @@ public class NetActivity extends BaseActivity implements INetActivityView{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_net);
         initDefaultHeader("网络通信");
-        presenter = new NetActivityPresenter(this);
         initView();
     }
+
+    @Override
+    protected NetActivityPresenter createPresenter() {
+        return new NetActivityPresenter();
+    }
+
     private void initView(){
         tv_data = (TextView) findViewById(R.id.tv_data);
         btn_start = (Button)findViewById(R.id.btn_start);
@@ -47,14 +52,14 @@ public class NetActivity extends BaseActivity implements INetActivityView{
                 tv_data.setText(msg);
 //                ((NetActivityPresenter)presenter).sendMessage(Base64.encodeToString(msg.getBytes(),Base64.DEFAULT),bindUntilEvent(ActivityEvent.DESTROY));
                 //这里的bindUntilEvent(ActivityEvent.DESTROY)是表示在什么样的生命周期取消订阅
-                ((NetActivityPresenter)presenter).sendMessage(msg,bindUntilEvent(ActivityEvent.DESTROY));
+                mPresenter.sendMessage(msg,bindUntilEvent(ActivityEvent.DESTROY));
             }
         });
         btn_receive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //这里的bindUntilEvent(ActivityEvent.DESTROY)是表示在什么样的生命周期取消订阅
-                ((NetActivityPresenter)presenter).requestMessage(bindUntilEvent(ActivityEvent.DESTROY));
+                mPresenter.requestMessage(bindUntilEvent(ActivityEvent.DESTROY));
             }
         });
 
@@ -62,14 +67,14 @@ public class NetActivity extends BaseActivity implements INetActivityView{
             @Override
             public void onClick(View v) {
                 //这里的bindUntilEvent(ActivityEvent.DESTROY)是表示在什么样的生命周期取消订阅
-                ((NetActivityPresenter)presenter).method(null,bindUntilEvent(ActivityEvent.DESTROY));
+                mPresenter.method(null,bindUntilEvent(ActivityEvent.DESTROY));
             }
         });
         btn_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,123)){
-                    ((NetActivityPresenter)presenter).upload("ddd",true,bindUntilEvent(ActivityEvent.DESTROY));
+                    mPresenter.upload("ddd",true,bindUntilEvent(ActivityEvent.DESTROY));
                 }
             }
         });
@@ -98,7 +103,7 @@ public class NetActivity extends BaseActivity implements INetActivityView{
             case 123:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission Granted
-                    ((NetActivityPresenter)presenter).upload("ddd",true,bindUntilEvent(ActivityEvent.DESTROY));
+                    mPresenter.upload("ddd",true,bindUntilEvent(ActivityEvent.DESTROY));
                 } else {
                     // Permission Denied
                    ToastUtils.showToast("没有磁盘读写权限");

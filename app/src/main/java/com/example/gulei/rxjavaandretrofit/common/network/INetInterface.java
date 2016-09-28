@@ -1,9 +1,9 @@
 package com.example.gulei.rxjavaandretrofit.common.network;
 
-import com.example.gulei.rxjavaandretrofit.common.entity.Emoji;
-import com.example.gulei.rxjavaandretrofit.common.entity.JsonResult;
-import com.example.gulei.rxjavaandretrofit.common.entity.Version;
-import com.example.gulei.rxjavaandretrofit.common.entity.user.UserData;
+import com.example.gulei.rxjavaandretrofit.mvp.entity.Emoji;
+import com.example.gulei.rxjavaandretrofit.mvp.entity.JsonResult;
+import com.example.gulei.rxjavaandretrofit.mvp.entity.Version;
+import com.example.gulei.rxjavaandretrofit.mvp.entity.user.UserData;
 
 import java.util.Map;
 
